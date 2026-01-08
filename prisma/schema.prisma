@@ -1,0 +1,241 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  admin
+  sales
+  production
+  client
+}
+
+enum QuoteStatus {
+  draft
+  approval_sent
+  approved
+  in_production
+  completed
+  on_hold
+}
+
+enum OrderStatus {
+  created
+  scheduled
+  in_production
+  completed
+  shipped
+}
+
+enum MachineType {
+  DTF
+  UV
+  Screen
+  Laser
+  Vinyl
+  ThreeD
+}
+
+model User {
+  id            String    @id @default(uuid())
+  email         String    @unique
+  name          String
+  role          UserRole
+  passwordHash  String    @map("password_hash")
+  phone         String?
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  createdQuotes   Quote[] @relation("QuoteCreator")
+  approvedQuotes  Quote[] @relation("QuoteApprover")
+  managedOrders   Order[] @relation("ProductionManager")
+  shippedOrders   Order[] @relation("ShippingManager")
+
+  @@map("users")
+}
+
+model Organization {
+  id        String   @id @default(uuid())
+  name      String
+  planTier  String?  @map("plan_tier")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  customers   Customer[]
+  quotes      Quote[]
+  machines    Machine[]
+  consumables Consumable[]
+
+  @@map("organizations")
+}
+
+model Customer {
+  id            String   @id @default(uuid())
+  organizationId String  @map("organization_id")
+  companyName   String   @map("company_name")
+  accountNumber String?  @map("account_number")
+  notes         String?
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  contacts     CustomerContact[]
+  quotes       Quote[]
+
+  @@index([organizationId])
+  @@map("customers")
+}
+
+model CustomerContact {
+  id         String  @id @default(uuid())
+  customerId String @map("customer_id")
+  name       String
+  email      String?
+  phone      String?
+  isBilling  Boolean @default(false) @map("is_billing")
+  isShipping Boolean @default(false) @map("is_shipping")
+
+  customer Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+
+  @@index([customerId])
+  @@map("customer_contacts")
+}
+
+model Quote {
+  id              String      @id @default(uuid())
+  organizationId  String      @map("organization_id")
+  customerId      String      @map("customer_id")
+  quoteNumber     String      @unique @map("quote_number")
+  status          QuoteStatus @default(draft)
+  productionDue   DateTime?   @map("production_due")
+  customerDue     DateTime?   @map("customer_due")
+  totalQuantity   Int         @default(0) @map("total_quantity")
+  totalAmount     Decimal     @default(0) @map("total_amount") @db.Decimal(10, 2)
+  productionNotes String?     @map("production_notes") @db.Text
+  createdBy       String      @map("created_by")
+  approvedBy      String?     @map("approved_by")
+  approvedAt      DateTime?   @map("approved_at")
+  createdAt       DateTime    @default(now()) @map("created_at")
+  updatedAt       DateTime    @updatedAt @map("updated_at")
+
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  customer       Customer     @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  creator        User         @relation("QuoteCreator", fields: [createdBy], references: [id])
+  approver       User?        @relation("QuoteApprover", fields: [approvedBy], references: [id])
+  lineItems      QuoteLineItem[]
+  order          Order?
+
+  @@index([organizationId])
+  @@index([customerId])
+  @@index([status])
+  @@map("quotes")
+}
+
+model QuoteLineItem {
+  id                     String  @id @default(uuid())
+  quoteId                String @map("quote_id")
+  category               String
+  itemCode               String? @map("item_code")
+  description            String? @db.Text
+  color                  String?
+  sizeBreakdown          Json?   @map("size_breakdown")
+  quantity               Int
+  unitPrice              Decimal @map("unit_price") @db.Decimal(10, 2)
+  markupPct              Decimal @default(0) @map("markup_pct") @db.Decimal(5, 2)
+  total                  Decimal @db.Decimal(10, 2)
+  productionInstructions String? @map("production_instructions") @db.Text
+  createdAt              DateTime @default(now()) @map("created_at")
+  updatedAt              DateTime @updatedAt @map("updated_at")
+
+  quote Quote @relation(fields: [quoteId], references: [id], onDelete: Cascade)
+
+  @@index([quoteId])
+  @@map("quote_line_items")
+}
+
+model Order {
+  id                      String      @id @default(uuid())
+  quoteId                 String      @unique @map("quote_id")
+  orderNumber             String      @unique @map("order_number")
+  status                  OrderStatus @default(created)
+  productionManagerId     String?     @map("production_manager_id")
+  shippingManagerId       String?     @map("shipping_manager_id")
+  scheduledProductionAt   DateTime?   @map("scheduled_production_at")
+  scheduledShippingAt     DateTime?   @map("scheduled_shipping_at")
+  createdAt               DateTime    @default(now()) @map("created_at")
+  updatedAt               DateTime    @updatedAt @map("updated_at")
+
+  quote           Quote @relation(fields: [quoteId], references: [id], onDelete: Cascade)
+  productionManager User? @relation("ProductionManager", fields: [productionManagerId], references: [id])
+  shippingManager   User? @relation("ShippingManager", fields: [shippingManagerId], references: [id])
+
+  @@index([quoteId])
+  @@index([status])
+  @@map("orders")
+}
+
+model Machine {
+  id                  String      @id @default(uuid())
+  organizationId      String      @map("organization_id")
+  name                String
+  machineType         MachineType @map("machine_type")
+  purchasePrice       Decimal?    @map("purchase_price") @db.Decimal(10, 2)
+  purchaseDate        DateTime?   @map("purchase_date") @db.Date
+  usefulLifeYears     Int?        @map("useful_life_years")
+  powerKw             Decimal?    @map("power_kw") @db.Decimal(5, 2)
+  maintenanceSchedule Json?       @map("maintenance_schedule")
+  insuranceCostYr     Decimal?    @map("insurance_cost_yr") @db.Decimal(10, 2)
+  createdAt           DateTime    @default(now()) @map("created_at")
+  updatedAt           DateTime    @updatedAt @map("updated_at")
+
+  organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  costingRecords  CostingRecord[]
+
+  @@index([organizationId])
+  @@map("machines")
+}
+
+model Consumable {
+  id           String   @id @default(uuid())
+  organizationId String @map("organization_id")
+  name         String
+  unitCost     Decimal  @map("unit_cost") @db.Decimal(10, 2)
+  unitMeasure  String   @map("unit_measure")
+  stockQty     Decimal  @default(0) @map("stock_qty") @db.Decimal(10, 2)
+  reorderPoint Decimal  @default(0) @map("reorder_point") @db.Decimal(10, 2)
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@map("consumables")
+}
+
+model CostingRecord {
+  id                  String   @id @default(uuid())
+  machineId           String   @map("machine_id")
+  jobAreaSqmm         Decimal  @map("job_area_sqmm") @db.Decimal(10, 2)
+  consumablesCost     Decimal  @default(0) @map("consumables_cost") @db.Decimal(10, 2)
+  powerCost           Decimal  @default(0) @map("power_cost") @db.Decimal(10, 2)
+  laborCost           Decimal  @default(0) @map("labor_cost") @db.Decimal(10, 2)
+  overheadCost        Decimal  @default(0) @map("overhead_cost") @db.Decimal(10, 2)
+  depreciation        Decimal  @default(0) @db.Decimal(10, 2)
+  maintenanceSavings  Decimal  @default(0) @map("maintenance_savings") @db.Decimal(10, 2)
+  printheadSavings    Decimal  @default(0) @map("printhead_savings") @db.Decimal(10, 2)
+  insuranceCost       Decimal  @default(0) @map("insurance_cost") @db.Decimal(10, 2)
+  wasteCost           Decimal  @default(0) @map("waste_cost") @db.Decimal(10, 2)
+  miscCost            Decimal  @default(0) @map("misc_cost") @db.Decimal(10, 2)
+  totalCost           Decimal  @map("total_cost") @db.Decimal(10, 2)
+  costPerSqmm         Decimal  @map("cost_per_sqmm") @db.Decimal(10, 4)
+  createdAt           DateTime @default(now()) @map("created_at")
+
+  machine Machine @relation(fields: [machineId], references: [id], onDelete: Cascade)
+
+  @@index([machineId])
+  @@map("costing_records")
+}

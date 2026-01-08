@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DROP OF COLOUR CRM</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 40px; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.1);
+            padding: 40px;
+            border-radius: 10px;
+        }
+        h1 { font-size: 2.5em; margin-bottom: 20px; }
+        .links { margin-top: 30px; }
+        a { 
+            display: inline-block; 
+            margin: 10px; 
+            padding: 12px 24px; 
+            background: #ffd700; 
+            color: #333; 
+            text-decoration: none; 
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        a:hover { background: #ffed4e; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 DROP OF COLOUR CRM</h1>
+        <p>Professional Print Shop Management System</p>
+        
+        <div class="links">
+            <a href="/health">🏥 Health Check</a>
+            <a href="/db-test">🔌 Database Test</a>
+            <a href="/api/customers">👥 Customers API</a>
+            <a href="/api/quotes">📄 Quotes API</a>
+            <a href="/api/machines">🏭 Machines API</a>
+        </div>
+        
+        <div style="margin-top: 40px; font-size: 0.9em; opacity: 0.8;">
+            <p>System Status: <span id="status">Checking...</span></p>
+        </div>
+    </div>
+
+    <script>
+        // Simple status check
+        fetch('/health')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('status').textContent = data.status === 'OK' ? '✅ Running' : '⚠️ Issues';
+            })
+            .catch(error => {
+                document.getElementById('status').textContent = '❌ Not Connected';
+            });
+    </script>
+</body>
+</html>
