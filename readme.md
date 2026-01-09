@@ -126,3 +126,43 @@ export const databaseConfig: DatabaseConfig = {
   ssl: process.env.DB_SSL === 'true',
   maxConnections: parseInt(process.env.DB_MAX_CONNECTIONS || '20')
 };
+
+
+# Drop Of Colour CRM - Print Shop Management System
+
+A modern, comprehensive CRM and production management system designed specifically for print shops offering DTF, UV, large format, screen printing, vinyl cutting, 3D printing, laser cutting, engraving, and routing services.
+
+## 🎨 Features
+
+### Core Functionality
+- **Customer Relationship Management** - Complete customer and contact management
+- **Quote Builder** - Advanced quoting system with line items and size breakdowns
+- **Costing Engine** - Ultimate Comprehensive Costing Module with cost/sqmm calculations
+- **Production Management** - Order scheduling, job tracking, and machine assignment
+- **Invoice & Payment Processing** - Integrated billing with Stripe support
+- **Inventory Management** - Consumables tracking with reorder alerts
+- **Machine Registry** - Equipment management with maintenance scheduling
+
+### Advanced Features
+- **Role-Based
+
+ Access Control** - Admin, Production Manager, Sales, Client roles
+- **Real-time Notifications** - WebSocket integration for live updates
+- **Client Portal** - Secure customer access for approvals and payments
+- **Audit Logging** - Complete audit trail for all business operations
+- **Multi-tenant Architecture** - Support for multiple organizations
+- **Automated Workflows** - Quote approval, invoice generation, production scheduling
+
+## 🚀 Quick Start
+
+### Prerequisites
+- Node.js 18+ 
+- PostgreSQL 14+
+- Redis (optional, for real-time features)
+
+### Installation
+
+1. **Clone the repository**
+```bash
+git clone https://github.com/yourusername/drop-of-colour-crm.git
+cd drop-of-colour-crm
