@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DROP OF COLOUR CRM</title>
+    <title>DROP OF COLOUR CRM - Professional Print Shop Management</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -63,13 +63,11 @@
             overflow-x: hidden;
         }
 
-        /* Layout */
         .app-container {
             display: flex;
             min-height: 100vh;
         }
 
-        /* Sidebar */
         .sidebar {
             width: var(--sidebar-width);
             background: var(--bg-secondary);
@@ -94,7 +92,7 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             font-weight: 700;
             color: var(--neon-blue);
             text-shadow: 0 0 10px var(--shadow-glow);
@@ -118,6 +116,7 @@
             text-decoration: none;
             border-left: 3px solid transparent;
             transition: all 0.3s ease;
+            cursor: pointer;
         }
 
         .nav-item:hover {
@@ -137,7 +136,6 @@
             text-align: center;
         }
 
-        /* Main Content */
         .main-content {
             flex: 1;
             margin-left: var(--sidebar-width);
@@ -145,7 +143,6 @@
             background: var(--bg-primary);
         }
 
-        /* Header */
         .header {
             background: var(--bg-secondary);
             border-bottom: 1px solid var(--border-color);
@@ -205,8 +202,6 @@
             gap: 10px;
             font-weight: 600;
             color: var(--text-primary);
-            position: relative;
-            overflow: hidden;
         }
 
         .theme-toggle:hover {
@@ -246,15 +241,45 @@
             color: var(--bg-primary);
         }
 
-        /* Content Area */
         .content-area {
             padding: 30px;
         }
 
-        /* Dashboard Grid */
+        .page-view {
+            display: none;
+        }
+
+        .page-view.active {
+            display: block;
+        }
+
+        .hero-section {
+            text-align: center;
+            padding: 40px 20px;
+            margin-bottom: 40px;
+        }
+
+        .hero-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-blue-glow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
         .dashboard-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 20px;
             margin-bottom: 30px;
         }
@@ -279,6 +304,11 @@
             background: linear-gradient(90deg, var(--neon-blue), var(--neon-blue-glow));
         }
 
+        .metric-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
         .metric-value {
             font-size: 2.5rem;
             font-weight: 700;
@@ -292,7 +322,6 @@
             font-weight: 500;
         }
 
-        /* Action Grid */
         .actions-section {
             margin-bottom: 40px;
         }
@@ -337,8 +366,6 @@
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
-            text-decoration: none;
-            color: inherit;
             box-shadow: 0 4px 20px var(--shadow-deep);
         }
 
@@ -382,7 +409,6 @@
             line-height: 1.5;
         }
 
-        /* Tables */
         .table-container {
             background: var(--bg-card);
             border-radius: 12px;
@@ -399,6 +425,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
         }
 
         .table-title {
@@ -410,10 +438,11 @@
         .table-actions {
             display: flex;
             gap: 10px;
+            flex-wrap: wrap;
         }
 
         .btn {
-            padding: 8px 16px;
+            padding: 10px 20px;
             border: none;
             border-radius: 6px;
             font-weight: 600;
@@ -447,6 +476,11 @@
             border-color: var(--neon-blue);
         }
 
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 0.85rem;
+        }
+
         .table-content {
             overflow-x: auto;
         }
@@ -463,6 +497,7 @@
             font-weight: 600;
             color: var(--text-secondary);
             border-bottom: 1px solid var(--border-light);
+            white-space: nowrap;
         }
 
         .data-table td {
@@ -479,11 +514,20 @@
             background: var(--bg-tertiary);
         }
 
+        .data-table tr.dragging {
+            opacity: 0.5;
+        }
+
+        .data-table tr.drag-over {
+            border-top: 3px solid var(--neon-blue);
+        }
+
         .status-badge {
             padding: 5px 12px;
             border-radius: 20px;
             font-size: 0.85rem;
             font-weight: 600;
+            display: inline-block;
         }
 
         .status-draft {
@@ -501,7 +545,26 @@
             color: var(--neon-blue);
         }
 
-        /* Forms */
+        .status-completed {
+            background: rgba(0, 255, 136, 0.2);
+            color: var(--success);
+        }
+
+        .status-pending {
+            background: rgba(255, 170, 0, 0.2);
+            color: var(--warning);
+        }
+
+        .status-active {
+            background: rgba(0, 255, 136, 0.2);
+            color: var(--success);
+        }
+
+        .status-inactive {
+            background: rgba(255, 68, 68, 0.2);
+            color: var(--danger);
+        }
+
         .form-container {
             background: var(--bg-card);
             border-radius: 12px;
@@ -564,6 +627,7 @@
         .form-textarea {
             min-height: 120px;
             resize: vertical;
+            font-family: inherit;
         }
 
         .form-footer {
@@ -574,11 +638,11 @@
             border-top: 1px solid var(--border-light);
         }
 
-        /* Tabs */
         .tabs {
             display: flex;
             border-bottom: 1px solid var(--border-light);
             margin-bottom: 30px;
+            flex-wrap: wrap;
         }
 
         .tab {
@@ -600,109 +664,6 @@
             background: var(--bg-tertiary);
         }
 
-        /* Cards */
-        .card-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-light);
-            border-radius: 12px;
-            padding: 25px;
-            box-shadow: 0 4px 20px var(--shadow-deep);
-        }
-
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .card-title {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: var(--text-primary);
-        }
-
-        .card-actions {
-            display: flex;
-            gap: 10px;
-        }
-
-        .card-content p {
-            color: var(--text-secondary);
-            line-height: 1.6;
-            margin-bottom: 15px;
-        }
-
-        /* Alerts */
-        .alert {
-            padding: 15px 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .alert-success {
-            background: rgba(0, 255, 136, 0.1);
-            border: 1px solid var(--success);
-            color: var(--success);
-        }
-
-        .alert-warning {
-            background: rgba(255, 170, 0, 0.1);
-            border: 1px solid var(--warning);
-            color: var(--warning);
-        }
-
-        .alert-danger {
-            background: rgba(255, 68, 68, 0.1);
-            border: 1px solid var(--danger);
-            color: var(--danger);
-        }
-
-        /* Pagination */
-        .pagination {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 30px;
-        }
-
-        .page-item {
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 8px;
-            background: var(--bg-card);
-            border: 1px solid var(--border-light);
-            color: var(--text-secondary);
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .page-item:hover {
-            background: var(--bg-tertiary);
-            color: var(--text-primary);
-        }
-
-        .page-item.active {
-            background: var(--neon-blue);
-            color: var(--bg-primary);
-            border-color: var(--neon-blue);
-        }
-
-        /* Status Section */
         .status-section {
             background: var(--bg-card);
             border: 1px solid var(--border-light);
@@ -731,22 +692,114 @@
             box-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
         }
 
-        .status-issues {
-            color: var(--warning);
-            border-color: var(--warning);
-            box-shadow: 0 0 15px rgba(255, 170, 0, 0.3);
+        .drag-handle {
+            cursor: move;
+            color: var(--text-muted);
+            margin-right: 10px;
         }
 
-        .status-error {
-            color: var(--danger);
-            border-color: var(--danger);
-            box-shadow: 0 0 15px rgba(255, 68, 68, 0.3);
+        .drag-handle:hover {
+            color: var(--neon-blue);
         }
 
-        /* Footer */
+        .kanban-board {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .kanban-column {
+            background: var(--bg-card);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: 20px;
+            min-height: 400px;
+        }
+
+        .kanban-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--border-light);
+        }
+
+        .kanban-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--text-primary);
+        }
+
+        .kanban-count {
+            background: var(--bg-tertiary);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--neon-blue);
+        }
+
+        .kanban-items {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            min-height: 300px;
+        }
+
+        .kanban-item {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            padding: 15px;
+            cursor: move;
+            transition: all 0.3s ease;
+        }
+
+        .kanban-item:hover {
+            border-color: var(--neon-blue);
+            box-shadow: 0 4px 12px var(--shadow-glow);
+        }
+
+        .kanban-item.dragging {
+            opacity: 0.5;
+        }
+
+        .kanban-item.drag-over {
+            border-top: 3px solid var(--neon-blue);
+        }
+
+        .kanban-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .kanban-item-title {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .kanban-item-meta {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .kanban-item-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid var(--border-light);
+        }
+
         .footer {
             text-align: center;
-            padding: 40px 0;
+            padding: 40px 20px;
             border-top: 1px solid var(--border-color);
             color: var(--text-secondary);
         }
@@ -757,16 +810,8 @@
             align-items: center;
             flex-wrap: wrap;
             gap: 20px;
-        }
-
-        /* Animations */
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        .pulse {
-            animation: pulse 2s infinite;
+            max-width: 1400px;
+            margin: 0 auto;
         }
 
         @keyframes slideIn {
@@ -784,7 +829,6 @@
             animation: slideIn 0.6s ease-out;
         }
 
-        /* Responsive */
         @media (max-width: 992px) {
             .sidebar {
                 transform: translateX(-100%);
@@ -811,6 +855,10 @@
             }
 
             .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .kanban-board {
                 grid-template-columns: 1fr;
             }
         }
@@ -851,24 +899,48 @@
             }
         }
 
-        /* Loading Animation */
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 2px solid var(--neon-blue);
-            border-radius: 50%;
-            border-top-color: transparent;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* Hidden elements */
         .hidden {
             display: none !important;
+        }
+
+        .notification {
+            position: fixed;
+            top: 90px;
+            right: 30px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            padding: 15px 20px;
+            box-shadow: 0 4px 20px var(--shadow-deep);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 300px;
+            animation: slideInRight 0.3s ease-out;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .notification.success {
+            border-left: 4px solid var(--success);
+        }
+
+        .notification.error {
+            border-left: 4px solid var(--danger);
+        }
+
+        .notification.warning {
+            border-left: 4px solid var(--warning);
         }
     </style>
 </head>
@@ -883,34 +955,42 @@
                 </div>
             </div>
             <nav class="nav-menu">
-                <a href="#" class="nav-item active" data-page="dashboard">
+                <div class="nav-item active" data-page="dashboard">
                     <i class="fas fa-home"></i>
                     <span>Dashboard</span>
-                </a>
-                <a href="#" class="nav-item" data-page="customers">
+                </div>
+                <div class="nav-item" data-page="customers">
                     <i class="fas fa-users"></i>
                     <span>Customers</span>
-                </a>
-                <a href="#" class="nav-item" data-page="quotes">
+                </div>
+                <div class="nav-item" data-page="quotes">
                     <i class="fas fa-file-invoice"></i>
                     <span>Quotes</span>
-                </a>
-                <a href="#" class="nav-item" data-page="orders">
+                </div>
+                <div class="nav-item" data-page="orders">
                     <i class="fas fa-shopping-cart"></i>
                     <span>Orders</span>
-                </a>
-                <a href="#" class="nav-item" data-page="machines">
+                </div>
+                <div class="nav-item" data-page="invoices">
+                    <i class="fas fa-file-invoice-dollar"></i>
+                    <span>Invoices</span>
+                </div>
+                <div class="nav-item" data-page="tasks">
+                    <i class="fas fa-tasks"></i>
+                    <span>Tasks</span>
+                </div>
+                <div class="nav-item" data-page="machines">
                     <i class="fas fa-cogs"></i>
                     <span>Machines</span>
-                </a>
-                <a href="#" class="nav-item" data-page="reports">
+                </div>
+                <div class="nav-item" data-page="reports">
                     <i class="fas fa-chart-bar"></i>
                     <span>Reports</span>
-                </a>
-                <a href="#" class="nav-item" data-page="settings">
+                </div>
+                <div class="nav-item" data-page="settings">
                     <i class="fas fa-cog"></i>
                     <span>Settings</span>
-                </a>
+                </div>
             </nav>
         </aside>
 
@@ -930,8 +1010,8 @@
                         <span>Light Mode</span>
                     </button>
                     <div class="user-menu">
-                        <div class="user-avatar">JD</div>
-                        <span>John Doe</span>
+                        <div class="user-avatar">DC</div>
+                        <span>Drop Of Colour</span>
                     </div>
                 </div>
             </header>
@@ -942,28 +1022,28 @@
                 <div class="page-view active" id="dashboardPage">
                     <section class="hero-section slide-in">
                         <h1 class="hero-title">Professional Print Shop Management</h1>
-                        <p class="hero-subtitle">Streamline your workflow, manage customers, track quotes, and optimize your print production with our comprehensive CRM solution.</p>
+                        <p class="hero-subtitle">Streamline your DTF, UVDTF, Large Format, UV Printing, 3D Printing, Laser Cutting & Engraving, Vinyl Cutting, and Sticker Making operations with our comprehensive CRM solution.</p>
                     </section>
 
                     <section class="dashboard-grid slide-in">
                         <div class="metric-card">
                             <div class="metric-icon">👥</div>
-                            <div class="metric-value" id="customerCount">24</div>
+                            <div class="metric-value" id="customerCount">47</div>
                             <div class="metric-label">Active Customers</div>
                         </div>
                         <div class="metric-card">
                             <div class="metric-icon">📄</div>
-                            <div class="metric-value" id="quoteCount">8</div>
+                            <div class="metric-value" id="quoteCount">12</div>
                             <div class="metric-label">Pending Quotes</div>
                         </div>
                         <div class="metric-card">
                             <div class="metric-icon">🏭</div>
-                            <div class="metric-value" id="machineCount">5</div>
+                            <div class="metric-value" id="machineCount">8</div>
                             <div class="metric-label">Active Machines</div>
                         </div>
                         <div class="metric-card">
                             <div class="metric-icon">✅</div>
-                            <div class="metric-value" id="completedJobs">142</div>
+                            <div class="metric-value" id="completedJobs">284</div>
                             <div class="metric-label">Completed Jobs</div>
                         </div>
                     </section>
@@ -973,33 +1053,33 @@
                             <h2 class="section-title">Quick Actions</h2>
                         </div>
                         <div class="actions-grid">
-                            <a href="#" class="action-card" data-page="customers">
+                            <div class="action-card" data-action="add-customer">
                                 <div class="action-icon"><i class="fas fa-user-plus"></i></div>
                                 <div class="action-title">Add Customer</div>
-                                <div class="action-description">Create a new customer profile</div>
-                            </a>
-                            <a href="#" class="action-card" data-page="quotes">
+                                <div class="action-description">Create a new customer profile with contact details</div>
+                            </div>
+                            <div class="action-card" data-action="new-quote">
                                 <div class="action-icon"><i class="fas fa-file-invoice-dollar"></i></div>
                                 <div class="action-title">New Quote</div>
-                                <div class="action-description">Create a new quotation</div>
-                            </a>
-                            <a href="#" class="action-card" data-page="orders">
+                                <div class="action-description">Generate a professional quotation for services</div>
+                            </div>
+                            <div class="action-card" data-action="new-order">
                                 <div class="action-icon"><i class="fas fa-tasks"></i></div>
                                 <div class="action-title">New Order</div>
-                                <div class="action-description">Create a production order</div>
-                            </a>
-                            <a href="#" class="action-card" data-page="machines">
+                                <div class="action-description">Create a production order and assign to machines</div>
+                            </div>
+                            <div class="action-card" data-action="machine-maintenance">
                                 <div class="action-icon"><i class="fas fa-wrench"></i></div>
                                 <div class="action-title">Machine Maintenance</div>
-                                <div class="action-description">Schedule maintenance</div>
-                            </a>
+                                <div class="action-description">Schedule maintenance for printing equipment</div>
+                            </div>
                         </div>
                     </section>
 
                     <section class="status-section slide-in">
                         <div class="status-indicator status-running" id="statusIndicator">
                             <i class="fas fa-check-circle"></i>
-                            <span>System is running normally</span>
+                            <span>All systems operational - 8 machines running</span>
                         </div>
                     </section>
 
@@ -1007,6 +1087,10 @@
                         <div class="table-container">
                             <div class="table-header">
                                 <h3 class="table-title">Recent Activity</h3>
+                                <div class="table-actions">
+                                    <button class="btn btn-secondary btn-sm"><i class="fas fa-filter"></i> Filter</button>
+                                    <button class="btn btn-secondary btn-sm"><i class="fas fa-download"></i> Export</button>
+                                </div>
                             </div>
                             <div class="table-content">
                                 <table class="data-table">
@@ -1015,45 +1099,51 @@
                                             <th>Date</th>
                                             <th>Customer</th>
                                             <th>Type</th>
+                                            <th>Service</th>
                                             <th>Status</th>
                                             <th>Amount</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td>2023-06-15</td>
-                                            <td>Tech Solutions Inc.</td>
+                                            <td>2024-01-10</td>
+                                            <td>Trendy Apparel Co.</td>
                                             <td>New Quote</td>
+                                            <td>DTF Printing</td>
                                             <td><span class="status-badge status-draft">Draft</span></td>
-                                            <td>$1,250.00</td>
+                                            <td>R 2,450.00</td>
                                         </tr>
                                         <tr>
-                                            <td>2023-06-14</td>
-                                            <td>Creative Designs Ltd.</td>
+                                            <td>2024-01-09</td>
+                                            <td>SignPro Solutions</td>
                                             <td>Order Completed</td>
-                                            <td><span class="status-badge status-approved">Approved</span></td>
-                                            <td>$3,420.50</td>
+                                            <td>Large Format UV</td>
+                                            <td><span class="status-badge status-completed">Completed</span></td>
+                                            <td>R 8,750.50</td>
                                         </tr>
                                         <tr>
-                                            <td>2023-06-12</td>
-                                            <td>Global Marketing Co.</td>
+                                            <td>2024-01-08</td>
+                                            <td>Creative Designs Ltd.</td>
                                             <td>Quote Approved</td>
+                                            <td>UVDTF Stickers</td>
                                             <td><span class="status-badge status-approved">Approved</span></td>
-                                            <td>$2,180.75</td>
+                                            <td>R 1,890.75</td>
                                         </tr>
                                         <tr>
-                                            <td>2023-06-10</td>
-                                            <td>Innovate Corp.</td>
+                                            <td>2024-01-07</td>
+                                            <td>Tech Gadgets Inc.</td>
                                             <td>New Order</td>
+                                            <td>Laser Engraving</td>
                                             <td><span class="status-badge status-production">In Production</span></td>
-                                            <td>$5,630.25</td>
+                                            <td>R 3,250.00</td>
                                         </tr>
                                         <tr>
-                                            <td>2023-06-08</td>
-                                            <td>Digital Media Group</td>
+                                            <td>2024-01-06</td>
+                                            <td>Fashion Forward</td>
                                             <td>Quote Sent</td>
-                                            <td><span class="status-badge status-draft">Pending</span></td>
-                                            <td>$1,890.00</td>
+                                            <td>Vinyl Cutting</td>
+                                            <td><span class="status-badge status-pending">Pending</span></td>
+                                            <td>R 1,125.00</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -1073,15 +1163,17 @@
 
                     <div class="table-container">
                         <div class="table-header">
-                            <h3 class="table-title">Customer List</h3>
+                            <h3 class="table-title">Customer List (Drag to reorder)</h3>
                             <div class="table-actions">
-                                <input type="text" class="form-input" placeholder="Search customers..." style="width: 250px;">
+                                <input type="text" class="form-input" placeholder="Search customers..." style="width: 250px;" id="customerSearch">
+                                <button class="btn btn-secondary btn-sm"><i class="fas fa-download"></i> Export</button>
                             </div>
                         </div>
                         <div class="table-content">
                             <table class="data-table">
                                 <thead>
                                     <tr>
+                                        <th></th>
                                         <th>Company Name</th>
                                         <th>Contact</th>
                                         <th>Email</th>
@@ -1090,46 +1182,62 @@
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>Tech Solutions Inc.</td>
-                                        <td>Robert Johnson</td>
-                                        <td>r.johnson@techsolutions.com</td>
-                                        <td>(555) 123-4567</td>
-                                        <td><span class="status-badge status-approved">Active</span></td>
+                                <tbody id="customersTableBody">
+                                    <tr draggable="true">
+                                        <td><i class="fas fa-grip-vertical drag-handle"></i></td>
+                                        <td>Trendy Apparel Co.</td>
+                                        <td>Sarah Johnson</td>
+                                        <td>sarah@trendyapparel.co.za</td>
+                                        <td>+27 82 345 6789</td>
+                                        <td><span class="status-badge status-active">Active</span></td>
                                         <td>
                                             <button class="btn btn-secondary btn-sm"><i class="fas fa-edit"></i></button>
                                             <button class="btn btn-secondary btn-sm"><i class="fas fa-eye"></i></button>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td>Creative Designs Ltd.</td>
-                                        <td>Sarah Williams</td>
-                                        <td>s.williams@creativedesigns.com</td>
-                                        <td>(555) 987-6543</td>
-                                        <td><span class="status-badge status-approved">Active</span></td>
-                                        <td>
-                                            <button class="btn btn-secondary btn-sm"><i class="fas fa-edit"></i></button>
-                                            <button class="btn btn-secondary btn-sm"><i class="fas fa-eye"></i></button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Global Marketing Co.</td>
+                                    <tr draggable="true">
+                                        <td><i class="fas fa-grip-vertical drag-handle"></i></td>
+                                        <td>SignPro Solutions</td>
                                         <td>Michael Chen</td>
-                                        <td>m.chen@globalmarketing.com</td>
-                                        <td>(555) 456-7890</td>
-                                        <td><span class="status-badge status-approved">Active</span></td>
+                                        <td>michael@signpro.co.za</td>
+                                        <td>+27 83 456 7890</td>
+                                        <td><span class="status-badge status-active">Active</span></td>
                                         <td>
                                             <button class="btn btn-secondary btn-sm"><i class="fas fa-edit"></i></button>
                                             <button class="btn btn-secondary btn-sm"><i class="fas fa-eye"></i></button>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td>Innovate Corp.</td>
-                                        <td>Jennifer Lee</td>
-                                        <td>j.lee@innovatecorp.com</td>
-                                        <td>(555) 234-5678</td>
-                                        <td><span class="status-badge status-draft">Inactive</span></td>
+                                    <tr draggable="true">
+                                        <td><i class="fas fa-grip-vertical drag-handle"></i></td>
+                                        <td>Creative Designs Ltd.</td>
+                                        <td>Jennifer Williams</td>
+                                        <td>jen@creativedesigns.co.za</td>
+                                        <td>+27 84 567 8901</td>
+                                        <td><span class="status-badge status-active">Active</span></td>
+                                        <td>
+                                            <button class="btn btn-secondary btn-sm"><i class="fas fa-edit"></i></button>
+                                            <button class="btn btn-secondary btn-sm"><i class="fas fa-eye"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr draggable="true">
+                                        <td><i class="fas fa-grip-vertical drag-handle"></i></td>
+                                        <td>Tech Gadgets Inc.</td>
+                                        <td>David Brown</td>
+                                        <td>david@techgadgets.co.za</td>
+                                        <td>+27 85 678 9012</td>
+                                        <td><span class="status-badge status-active">Active</span></td>
+                                        <td>
+                                            <button class="btn btn-secondary btn-sm"><i class="fas fa-edit"></i></button>
+                                            <button class="btn btn-secondary btn-sm"><i class="fas fa-eye"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr draggable="true">
+                                        <td><i class="fas fa-grip-vertical drag-handle"></i></td>
+                                        <td>Fashion Forward</td>
+                                        <td>Emma Davis</td>
+                                        <td>emma@fashionforward.co.za</td>
+                                        <td>+27 86 789 0123</td>
+                                        <td><span class="status-badge status-inactive">Inactive</span></td>
                                         <td>
                                             <button class="btn btn-secondary btn-sm"><i class="fas fa-edit"></i></button>
                                             <button class="btn btn-secondary btn-sm"><i class="fas fa-eye"></i></button>
@@ -1137,6 +1245,62 @@
                                     </tr>
                                 </tbody>
                             </table>
+                        </div>
+                    </div>
+
+                    <!-- Add Customer Form -->
+                    <div class="form-container hidden" id="customerForm">
+                        <div class="form-header">
+                            <h2 class="form-title">Add New Customer</h2>
+                            <p class="form-description">Enter the details of the new customer below</p>
+                        </div>
+
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label">Company Name *</label>
+                                <input type="text" class="form-input" placeholder="e.g., Acme Printing Co." value="">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Account Number</label>
+                                <input type="text" class="form-input" placeholder="Auto-generated" value="ACC-2024-048">
+                            </div>
+                        </div>
+
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label">Primary Contact *</label>
+                                <input type="text" class="form-input" placeholder="Contact person name" value="">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Email *</label>
+                                <input type="email" class="form-input" placeholder="contact@company.co.za" value="">
+                            </div>
+                        </div>
+
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label">Phone *</label>
+                                <input type="tel" class="form-input" placeholder="+27 XX XXX XXXX" value="">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Website</label>
+                                <input type="url" class="form-input" placeholder="https://www.company.co.za" value="">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Physical Address</label>
+                            <textarea class="form-textarea" placeholder="Street address, City, Province, Postal Code"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Notes</label>
+                            <textarea class="form-textarea" placeholder="Additional notes about this customer (preferred services, special requirements, etc.)"></textarea>
+                        </div>
+
+                        <div class="form-footer">
+                            <button class="btn btn-secondary" id="cancelCustomerBtn">Cancel</button>
+                            <button class="btn btn-primary" id="saveCustomerBtn">Save Customer</button>
                         </div>
                     </div>
                 </div>
@@ -1151,79 +1315,674 @@
                     </div>
 
                     <div class="tabs">
-                        <div class="tab active">All Quotes</div>
-                        <div class="tab">Draft</div>
-                        <div class="tab">Sent</div>
-                        <div class="tab">Approved</div>
-                        <div class="tab">Expired</div>
+                        <div class="tab active" data-tab="all">All Quotes</div>
+                        <div class="tab" data-tab="draft">Draft</div>
+                        <div class="tab" data-tab="sent">Sent</div>
+                        <div class="tab" data-tab="approved">Approved</div>
+                        <div class="tab" data-tab="expired">Expired</div>
                     </div>
 
                     <div class="table-container">
                         <div class="table-header">
-                            <h3 class="table-title">Quote List</h3>
+                            <h3 class="table-title">Quote List (Drag to reorder)</h3>
                             <div class="table-actions">
                                 <input type="text" class="form-input" placeholder="Search quotes..." style="width: 250px;">
+                                <button class="btn btn-secondary btn-sm"><i class="fas fa-filter"></i> Filter</button>
+                                <button class="btn btn-secondary btn-sm"><i class="fas fa-download"></i> Export</button>
                             </div>
                         </div>
                         <div class="table-content">
                             <table class="data-table">
                                 <thead>
                                     <tr>
+                                        <th></th>
                                         <th>Quote #</th>
                                         <th>Customer</th>
+                                        <th>Service</th>
                                         <th>Date</th>
-                                        <th>Due Date</th>
+                                        <th>Valid Until</th>
                                         <th>Status</th>
                                         <th>Total</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
+                                <tbody id="quotesTableBody">
+                                    <tr draggable="true">
+                                        <td><i class="fas fa-grip-vertical drag-handle"></i></td>
+                                        <td>QT-2024-015</td>
+                                        <td>Trendy Apparel Co.</td>
+                                        <td>DTF Printing</td>
+                                        <td>2024-01-10</td>
+                                        <td>2024-02-10</td>
+                                        <td><span class="status-badge status-draft">Draft</span></td>
+                                        <td>R 2,450.00</td>
+                                        <td>
+                                            <button class="btn btn-secondary btn-sm"><i class="fas fa-edit"></i></button>
+                                            <button class="btn btn-secondary btn-sm"><i class="fas fa-eye"></i></button>
+                                            <button class="btn btn-secondary btn-sm"><i class="fas fa-paper-plane"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr draggable="true">
+                                        <td><i class="fas fa-grip-vertical drag-handle"></i></td>
+                                        <td>QT-2024-014</td>
+                                        <td>SignPro Solutions</td>
+                                        <td>Large Format UV</td>
+                                        <td>2024-01-08</td>
+                                        <td>2024-02-08</td>
+                                        <td><span class="status-badge status-approved">Approved</span></td>
+                                        <td>R 8,750.50</td>
+                                        <td>
+                                            <button class="btn btn-secondary btn-sm"><i class="fas fa-edit"></i></button>
+                                            <button class="btn btn-secondary btn-sm"><i class="fas fa-eye"></i></button>
+                                            <button class="btn btn-primary btn-sm"><i class="fas fa-check"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr draggable="true">
+                                        <td><i class="fas fa-grip-vertical drag-handle"></i></td>
+                                        <td>QT-2024-013</td>
+                                        <td>Creative Designs Ltd.</td>
+                                        <td>UVDTF Stickers</td>
+                                        <td>2024-01-05</td>
+                                        <td>2024-02-05</td>
+                                        <td><span class="status-badge status-approved">Approved</span></td>
+                                        <td>R 1,890.75</td>
+                                        <td>
+                                            <button class="btn btn-secondary btn-sm"><i class="fas fa-edit"></i></button>
+                                            <button class="btn btn-secondary btn-sm"><i class="fas fa-eye"></i></button>
+                                            <button class="btn btn-primary btn-sm"><i class="fas fa-check"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr draggable="true">
+                                        <td><i class="fas fa-grip-vertical drag-handle"></i></td>
+                                        <td>QT-2024-012</td>
+                                        <td>Tech Gadgets Inc.</td>
+                                        <td>Laser Engraving</td>
+                                        <td>2024-01-03</td>
+                                        <td>2024-02-03</td>
+                                        <td><span class="status-badge status-pending">Sent</span></td>
+                                        <td>R 3,250.00</td>
+                                        <td>
+                                            <button class="btn btn-secondary btn-sm"><i class="fas fa-edit"></i></button>
+                                            <button class="btn btn-secondary btn-sm"><i class="fas fa-eye"></i></button>
+                                            <button class="btn btn-secondary btn-sm"><i class="fas fa-redo"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr draggable="true">
+                                        <td><i class="fas fa-grip-vertical drag-handle"></i></td>
+                                        <td>QT-2024-011</td>
+                                        <td>Fashion Forward</td>
+                                        <td>Vinyl Cutting</td>
+                                        <td>2024-01-01</td>
+                                        <td>2024-02-01</td>
+                                        <td><span class="status-badge status-draft">Draft</span></td>
+                                        <td>R 1,125.00</td>
+                                        <td>
+                                            <button class="btn btn-secondary btn-sm"><i class="fas fa-edit"></i></button>
+                                            <button class="btn btn-secondary btn-sm"><i class="fas fa-eye"></i></button>
+                                            <button class="btn btn-secondary btn-sm"><i class="fas fa-paper-plane"></i></button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- New Quote Form -->
+                    <div class="form-container hidden" id="quoteForm">
+                        <div class="form-header">
+                            <h2 class="form-title">Create New Quote</h2>
+                            <p class="form-description">Generate a professional quotation for your customer</p>
+                        </div>
+
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label">Quote Number</label>
+                                <input type="text" class="form-input" value="QT-2024-016" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Date</label>
+                                <input type="date" class="form-input" value="2024-01-10">
+                            </div>
+                        </div>
+
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label">Customer *</label>
+                                <select class="form-select">
+                                    <option value="">Select a customer</option>
+                                    <option value="1">Trendy Apparel Co.</option>
+                                    <option value="2">SignPro Solutions</option>
+                                    <option value="3">Creative Designs Ltd.</option>
+                                    <option value="4">Tech Gadgets Inc.</option>
+                                    <option value="5">Fashion Forward</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Valid Until *</label>
+                                <input type="date" class="form-input" value="2024-02-10">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Service Type *</label>
+                            <select class="form-select">
+                                <option value="">Select service</option>
+                                <option value="dtf">DTF Printing</option>
+                                <option value="uvdtf">UVDTF Printing</option>
+                                <option value="large-format">Large Format Printing</option>
+                                <option value="uv-printing">UV Printing</option>
+                                <option value="3d-printing">3D Printing</option>
+                                <option value="laser">Laser Cutting & Engraving</option>
+                                <option value="vinyl">Vinyl Cutting</option>
+                                <option value="stickers">Sticker Making</option>
+                            </select>
+                        </div>
+
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label">Quantity</label>
+                                <input type="number" class="form-input" placeholder="Enter quantity" value="100">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Unit Price (R)</label>
+                                <input type="number" class="form-input" placeholder="0.00" value="24.50" step="0.01">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Description</label>
+                            <textarea class="form-textarea" placeholder="Detailed description of the service and specifications">Custom DTF prints on premium transfer film, full color CMYK + White, size 30x40cm, ready for heat press application.</textarea>
+                        </div>
+
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label">Subtotal (R)</label>
+                                <input type="text" class="form-input" value="2,450.00" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">VAT 15% (R)</label>
+                                <input type="text" class="form-input" value="367.50" readonly>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Total Amount (R)</label>
+                            <input type="text" class="form-input" value="2,817.50" readonly style="font-size: 1.2rem; font-weight: 700; color: var(--neon-blue);">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Terms & Conditions</label>
+                            <textarea class="form-textarea">Payment terms: 50% deposit required, balance on completion. Turnaround time: 5-7 business days. Quote valid for 30 days.</textarea>
+                        </div>
+
+                        <div class="form-footer">
+                            <button class="btn btn-secondary" id="cancelQuoteBtn">Cancel</button>
+                            <button class="btn btn-secondary">Save as Draft</button>
+                            <button class="btn btn-primary" id="saveQuoteBtn">Save & Send Quote</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Orders Page with Kanban -->
+                <div class="page-view" id="ordersPage">
+                    <div class="section-header">
+                        <h1 class="section-title">Production Orders</h1>
+                        <button class="btn btn-primary" id="newOrderBtn">
+                            <i class="fas fa-plus"></i> New Order
+                        </button>
+                    </div>
+
+                    <div class="kanban-board" id="kanbanBoard">
+                        <div class="kanban-column" data-status="pending">
+                            <div class="kanban-header">
+                                <span class="kanban-title">📋 Pending</span>
+                                <span class="kanban-count">3</span>
+                            </div>
+                            <div class="kanban-items" data-column="pending">
+                                <div class="kanban-item" draggable="true" data-order="ORD-2024-045">
+                                    <div class="kanban-item-header">
+                                        <span class="kanban-item-title">ORD-2024-045</span>
+                                        <i class="fas fa-grip-vertical drag-handle"></i>
+                                    </div>
+                                    <div class="kanban-item-meta">Trendy Apparel Co.</div>
+                                    <div class="kanban-item-meta">DTF Printing - 100 units</div>
+                                    <div class="kanban-item-footer">
+                                        <span class="status-badge status-pending">Pending</span>
+                                        <span style="color: var(--text-secondary); font-size: 0.85rem;">R 2,450</span>
+                                    </div>
+                                </div>
+                                <div class="kanban-item" draggable="true" data-order="ORD-2024-046">
+                                    <div class="kanban-item-header">
+                                        <span class="kanban-item-title">ORD-2024-046</span>
+                                        <i class="fas fa-grip-vertical drag-handle"></i>
+                                    </div>
+                                    <div class="kanban-item-meta">Fashion Forward</div>
+                                    <div class="kanban-item-meta">Vinyl Cutting - 50 units</div>
+                                    <div class="kanban-item-footer">
+                                        <span class="status-badge status-pending">Pending</span>
+                                        <span style="color: var(--text-secondary); font-size: 0.85rem;">R 1,125</span>
+                                    </div>
+                                </div>
+                                <div class="kanban-item" draggable="true" data-order="ORD-2024-047">
+                                    <div class="kanban-item-header">
+                                        <span class="kanban-item-title">ORD-2024-047</span>
+                                        <i class="fas fa-grip-vertical drag-handle"></i>
+                                    </div>
+                                    <div class="kanban-item-meta">Tech Gadgets Inc.</div>
+                                    <div class="kanban-item-meta">3D Printing - Custom parts</div>
+                                    <div class="kanban-item-footer">
+                                        <span class="status-badge status-pending">Pending</span>
+                                        <span style="color: var(--text-secondary); font-size: 0.85rem;">R 4,200</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="kanban-column" data-status="production">
+                            <div class="kanban-header">
+                                <span class="kanban-title">🏭 In Production</span>
+                                <span class="kanban-count">4</span>
+                            </div>
+                            <div class="kanban-items" data-column="production">
+                                <div class="kanban-item" draggable="true" data-order="ORD-2024-041">
+                                    <div class="kanban-item-header">
+                                        <span class="kanban-item-title">ORD-2024-041</span>
+                                        <i class="fas fa-grip-vertical drag-handle"></i>
+                                    </div>
+                                    <div class="kanban-item-meta">SignPro Solutions</div>
+                                    <div class="kanban-item-meta">Large Format UV - 5 banners</div>
+                                    <div class="kanban-item-footer">
+                                        <span class="status-badge status-production">In Production</span>
+                                        <span style="color: var(--text-secondary); font-size: 0.85rem;">R 8,750</span>
+                                    </div>
+                                </div>
+                                <div class="kanban-item" draggable="true" data-order="ORD-2024-042">
+                                    <div class="kanban-item-header">
+                                        <span class="kanban-item-title">ORD-2024-042</span>
+                                        <i class="fas fa-grip-vertical drag-handle"></i>
+                                    </div>
+                                    <div class="kanban-item-meta">Creative Designs Ltd.</div>
+                                    <div class="kanban-item-meta">UVDTF Stickers - 200 units</div>
+                                    <div class="kanban-item-footer">
+                                        <span class="status-badge status-production">In Production</span>
+                                        <span style="color: var(--text-secondary); font-size: 0.85rem;">R 1,890</span>
+                                    </div>
+                                </div>
+                                <div class="kanban-item" draggable="true" data-order="ORD-2024-043">
+                                    <div class="kanban-item-header">
+                                        <span class="kanban-item-title">ORD-2024-043</span>
+                                        <i class="fas fa-grip-vertical drag-handle"></i>
+                                    </div>
+                                    <div class="kanban-item-meta">Tech Gadgets Inc.</div>
+                                    <div class="kanban-item-meta">Laser Engraving - 75 items</div>
+                                    <div class="kanban-item-footer">
+                                        <span class="status-badge status-production">In Production</span>
+                                        <span style="color: var(--text-secondary); font-size: 0.85rem;">R 3,250</span>
+                                    </div>
+                                </div>
+                                <div class="kanban-item" draggable="true" data-order="ORD-2024-044">
+                                    <div class="kanban-item-header">
+                                        <span class="kanban-item-title">ORD-2024-044</span>
+                                        <i class="fas fa-grip-vertical drag-handle"></i>
+                                    </div>
+                                    <div class="kanban-item-meta">Trendy Apparel Co.</div>
+                                    <div class="kanban-item-meta">DTF Printing - 150 transfers</div>
+                                    <div class="kanban-item-footer">
+                                        <span class="status-badge status-production">In Production</span>
+                                        <span style="color: var(--text-secondary); font-size: 0.85rem;">R 3,675</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="kanban-column" data-status="quality">
+                            <div class="kanban-header">
+                                <span class="kanban-title">✅ Quality Check</span>
+                                <span class="kanban-count">2</span>
+                            </div>
+                            <div class="kanban-items" data-column="quality">
+                                <div class="kanban-item" draggable="true" data-order="ORD-2024-039">
+                                    <div class="kanban-item-header">
+                                        <span class="kanban-item-title">ORD-2024-039</span>
+                                        <i class="fas fa-grip-vertical drag-handle"></i>
+                                    </div>
+                                    <div class="kanban-item-meta">SignPro Solutions</div>
+                                    <div class="kanban-item-meta">UV Printing - 10 signs</div>
+                                    <div class="kanban-item-footer">
+                                        <span class="status-badge status-approved">QC</span>
+                                        <span style="color: var(--text-secondary); font-size: 0.85rem;">R 5,500</span>
+                                    </div>
+                                </div>
+                                <div class="kanban-item" draggable="true" data-order="ORD-2024-040">
+                                    <div class="kanban-item-header">
+                                        <span class="kanban-item-title">ORD-2024-040</span>
+                                        <i class="fas fa-grip-vertical drag-handle"></i>
+                                    </div>
+                                    <div class="kanban-item-meta">Fashion Forward</div>
+                                    <div class="kanban-item-meta">Sticker Making - 300 units</div>
+                                    <div class="kanban-item-footer">
+                                        <span class="status-badge status-approved">QC</span>
+                                        <span style="color: var(--text-secondary); font-size: 0.85rem;">R 2,100</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="kanban-column" data-status="completed">
+                            <div class="kanban-header">
+                                <span class="kanban-title">🎉 Completed</span>
+                                <span class="kanban-count">5</span>
+                            </div>
+                            <div class="kanban-items" data-column="completed">
+                                <div class="kanban-item" draggable="true" data-order="ORD-2024-034">
+                                    <div class="kanban-item-header">
+                                        <span class="kanban-item-title">ORD-2024-034</span>
+                                        <i class="fas fa-grip-vertical drag-handle"></i>
+                                    </div>
+                                    <div class="kanban-item-meta">Creative Designs Ltd.</div>
+                                    <div class="kanban-item-meta">DTF Printing - 80 units</div>
+                                    <div class="kanban-item-footer">
+                                        <span class="status-badge status-completed">Completed</span>
+                                        <span style="color: var(--text-secondary); font-size: 0.85rem;">R 1,960</span>
+                                    </div>
+                                </div>
+                                <div class="kanban-item" draggable="true" data-order="ORD-2024-035">
+                                    <div class="kanban-item-header">
+                                        <span class="kanban-item-title">ORD-2024-035</span>
+                                        <i class="fas fa-grip-vertical drag-handle"></i>
+                                    </div>
+                                    <div class="kanban-item-meta">Tech Gadgets Inc.</div>
+                                    <div class="kanban-item-meta">Laser Cutting - Custom designs</div>
+                                    <div class="kanban-item-footer">
+                                        <span class="status-badge status-completed">Completed</span>
+                                        <span style="color: var(--text-secondary); font-size: 0.85rem;">R 2,800</span>
+                                    </div>
+                                </div>
+                                <div class="kanban-item" draggable="true" data-order="ORD-2024-036">
+                                    <div class="kanban-item-header">
+                                        <span class="kanban-item-title">ORD-2024-036</span>
+                                        <i class="fas fa-grip-vertical drag-handle"></i>
+                                    </div>
+                                    <div class="kanban-item-meta">Trendy Apparel Co.</div>
+                                    <div class="kanban-item-meta">UVDTF - 120 transfers</div>
+                                    <div class="kanban-item-footer">
+                                        <span class="status-badge status-completed">Completed</span>
+                                        <span style="color: var(--text-secondary); font-size: 0.85rem;">R 2,940</span>
+                                    </div>
+                                </div>
+                                <div class="kanban-item" draggable="true" data-order="ORD-2024-037">
+                                    <div class="kanban-item-header">
+                                        <span class="kanban-item-title">ORD-2024-037</span>
+                                        <i class="fas fa-grip-vertical drag-handle"></i>
+                                    </div>
+                                    <div class="kanban-item-meta">SignPro Solutions</div>
+                                    <div class="kanban-item-meta">Large Format - 3 posters</div>
+                                    <div class="kanban-item-footer">
+                                        <span class="status-badge status-completed">Completed</span>
+                                        <span style="color: var(--text-secondary); font-size: 0.85rem;">R 4,500</span>
+                                    </div>
+                                </div>
+                                <div class="kanban-item" draggable="true" data-order="ORD-2024-038">
+                                    <div class="kanban-item-header">
+                                        <span class="kanban-item-title">ORD-2024-038</span>
+                                        <i class="fas fa-grip-vertical drag-handle"></i>
+                                    </div>
+                                    <div class="kanban-item-meta">Fashion Forward</div>
+                                    <div class="kanban-item-meta">Vinyl Cutting - 60 decals</div>
+                                    <div class="kanban-item-footer">
+                                        <span class="status-badge status-completed">Completed</span>
+                                        <span style="color: var(--text-secondary); font-size: 0.85rem;">R 1,350</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Invoices Page -->
+                <div class="page-view" id="invoicesPage">
+                    <div class="section-header">
+                        <h1 class="section-title">Invoices</h1>
+                        <button class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Create Invoice
+                        </button>
+                    </div>
+                    <div class="table-container">
+                        <div class="table-header">
+                            <h3 class="table-title">Invoice History</h3>
+                        </div>
+                        <div class="table-content">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Invoice #</th>
+                                        <th>Customer</th>
+                                        <th>Date</th>
+                                        <th>Due Date</th>
+                                        <th>Status</th>
+                                        <th>Amount</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
                                 <tbody>
                                     <tr>
-                                        <td>QT-2023-001</td>
-                                        <td>Tech Solutions Inc.</td>
-                                        <td>2023-06-15</td>
-                                        <td>2023-07-15</td>
-                                        <td><span class="status-badge status-draft">Draft</span></td>
-                                        <td>$1,250.00</td>
+                                        <td>INV-2024-001</td>
+                                        <td>Trendy Apparel Co.</td>
+                                        <td>2024-01-10</td>
+                                        <td>2024-01-24</td>
+                                        <td><span class="status-badge status-pending">Unpaid</span></td>
+                                        <td>R 2,817.50</td>
+                                        <td><button class="btn btn-secondary btn-sm"><i class="fas fa-eye"></i></button></td>
+                                    </tr>
+                                    <tr>
+                                        <td>INV-2024-002</td>
+                                        <td>SignPro Solutions</td>
+                                        <td>2024-01-09</td>
+                                        <td>2024-01-23</td>
+                                        <td><span class="status-badge status-completed">Paid</span></td>
+                                        <td>R 10,063.08</td>
+                                        <td><button class="btn btn-secondary btn-sm"><i class="fas fa-eye"></i></button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tasks Page -->
+                <div class="page-view" id="tasksPage">
+                    <div class="section-header">
+                        <h1 class="section-title">Tasks</h1>
+                        <button class="btn btn-primary">
+                            <i class="fas fa-plus"></i> New Task
+                        </button>
+                    </div>
+                    <div class="table-container">
+                        <div class="table-header">
+                            <h3 class="table-title">Daily Tasks</h3>
+                        </div>
+                        <div class="table-content">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Task</th>
+                                        <th>Assigned To</th>
+                                        <th>Priority</th>
+                                        <th>Due Date</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Clean DTF Printheads</td>
+                                        <td>Production Team</td>
+                                        <td><span class="status-badge status-inactive">High</span></td>
+                                        <td>Daily</td>
+                                        <td><span class="status-badge status-pending">Pending</span></td>
+                                        <td><button class="btn btn-secondary btn-sm"><i class="fas fa-check"></i></button></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Restock UV Ink</td>
+                                        <td>Admin</td>
+                                        <td><span class="status-badge status-draft">Medium</span></td>
+                                        <td>2024-01-12</td>
+                                        <td><span class="status-badge status-completed">Done</span></td>
+                                        <td><button class="btn btn-secondary btn-sm"><i class="fas fa-check"></i></button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Machines Page -->
+                <div class="page-view" id="machinesPage">
+                    <div class="section-header">
+                        <h1 class="section-title">Machines & Equipment</h1>
+                        <button class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Add Machine
+                        </button>
+                    </div>
+
+                    <div class="dashboard-grid">
+                        <div class="metric-card">
+                            <div class="metric-icon">🖨️</div>
+                            <div class="metric-value">8</div>
+                            <div class="metric-label">Total Machines</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-icon">✅</div>
+                            <div class="metric-value">7</div>
+                            <div class="metric-label">Operational</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-icon">🔧</div>
+                            <div class="metric-value">1</div>
+                            <div class="metric-label">Maintenance</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-icon">📊</div>
+                            <div class="metric-value">87.5%</div>
+                            <div class="metric-label">Uptime</div>
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <div class="table-header">
+                            <h3 class="table-title">Equipment List</h3>
+                            <div class="table-actions">
+                                <button class="btn btn-secondary btn-sm"><i class="fas fa-filter"></i> Filter</button>
+                                <button class="btn btn-secondary btn-sm"><i class="fas fa-download"></i> Export</button>
+                            </div>
+                        </div>
+                        <div class="table-content">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Machine Name</th>
+                                        <th>Type</th>
+                                        <th>Model</th>
+                                        <th>Status</th>
+                                        <th>Last Maintenance</th>
+                                        <th>Next Service</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>DTF Printer #1</td>
+                                        <td>DTF Printing</td>
+                                        <td>Epson F2100</td>
+                                        <td><span class="status-badge status-active">Operational</span></td>
+                                        <td>2024-01-05</td>
+                                        <td>2024-02-05</td>
                                         <td>
-                                            <button class="btn btn-secondary btn-sm"><i class="fas fa-edit"></i></button>
+                                            <button class="btn btn-secondary btn-sm"><i class="fas fa-wrench"></i></button>
                                             <button class="btn btn-secondary btn-sm"><i class="fas fa-eye"></i></button>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>QT-2023-002</td>
-                                        <td>Creative Designs Ltd.</td>
-                                        <td>2023-06-10</td>
-                                        <td>2023-07-10</td>
-                                        <td><span class="status-badge status-approved">Approved</span></td>
-                                        <td>$3,420.50</td>
+                                        <td>UV Printer #1</td>
+                                        <td>UV Printing</td>
+                                        <td>Roland LEF-300</td>
+                                        <td><span class="status-badge status-active">Operational</span></td>
+                                        <td>2024-01-03</td>
+                                        <td>2024-02-03</td>
                                         <td>
-                                            <button class="btn btn-secondary btn-sm"><i class="fas fa-edit"></i></button>
+                                            <button class="btn btn-secondary btn-sm"><i class="fas fa-wrench"></i></button>
                                             <button class="btn btn-secondary btn-sm"><i class="fas fa-eye"></i></button>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>QT-2023-003</td>
-                                        <td>Global Marketing Co.</td>
-                                        <td>2023-06-05</td>
-                                        <td>2023-07-05</td>
-                                        <td><span class="status-badge status-approved">Approved</span></td>
-                                        <td>$2,180.75</td>
+                                        <td>Large Format Printer</td>
+                                        <td>Large Format</td>
+                                        <td>HP Latex 570</td>
+                                        <td><span class="status-badge status-active">Operational</span></td>
+                                        <td>2023-12-28</td>
+                                        <td>2024-01-28</td>
                                         <td>
-                                            <button class="btn btn-secondary btn-sm"><i class="fas fa-edit"></i></button>
+                                            <button class="btn btn-secondary btn-sm"><i class="fas fa-wrench"></i></button>
                                             <button class="btn btn-secondary btn-sm"><i class="fas fa-eye"></i></button>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>QT-2023-004</td>
-                                        <td>Innovate Corp.</td>
-                                        <td>2023-05-28</td>
-                                        <td>2023-06-28</td>
-                                        <td><span class="status-badge status-production">In Production</span></td>
-                                        <td>$5,630.25</td>
+                                        <td>Laser Cutter #1</td>
+                                        <td>Laser Cutting</td>
+                                        <td>Trotec Speedy 400</td>
+                                        <td><span class="status-badge status-active">Operational</span></td>
+                                        <td>2024-01-08</td>
+                                        <td>2024-02-08</td>
                                         <td>
-                                            <button class="btn btn-secondary btn-sm"><i class="fas fa-edit"></i></button>
+                                            <button class="btn btn-secondary btn-sm"><i class="fas fa-wrench"></i></button>
+                                            <button class="btn btn-secondary btn-sm"><i class="fas fa-eye"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Laser Engraver #1</td>
+                                        <td>Laser Engraving</td>
+                                        <td>Epilog Fusion Pro</td>
+                                        <td><span class="status-badge status-pending">Maintenance</span></td>
+                                        <td>2023-12-15</td>
+                                        <td>2024-01-15</td>
+                                        <td>
+                                            <button class="btn btn-secondary btn-sm"><i class="fas fa-wrench"></i></button>
+                                            <button class="btn btn-secondary btn-sm"><i class="fas fa-eye"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>3D Printer #1</td>
+                                        <td>3D Printing</td>
+                                        <td>Prusa i3 MK3S+</td>
+                                        <td><span class="status-badge status-active">Operational</span></td>
+                                        <td>2024-01-02</td>
+                                        <td>2024-02-02</td>
+                                        <td>
+                                            <button class="btn btn-secondary btn-sm"><i class="fas fa-wrench"></i></button>
+                                            <button class="btn btn-secondary btn-sm"><i class="fas fa-eye"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Vinyl Cutter #1</td>
+                                        <td>Vinyl Cutting</td>
+                                        <td>Roland GS-24</td>
+                                        <td><span class="status-badge status-active">Operational</span></td>
+                                        <td>2024-01-06</td>
+                                        <td>2024-02-06</td>
+                                        <td>
+                                            <button class="btn btn-secondary btn-sm"><i class="fas fa-wrench"></i></button>
+                                            <button class="btn btn-secondary btn-sm"><i class="fas fa-eye"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Heat Press #1</td>
+                                        <td>Heat Transfer</td>
+                                        <td>Hotronix Auto Open</td>
+                                        <td><span class="status-badge status-active">Operational</span></td>
+                                        <td>2024-01-04</td>
+                                        <td>2024-02-04</td>
+                                        <td>
+                                            <button class="btn btn-secondary btn-sm"><i class="fas fa-wrench"></i></button>
                                             <button class="btn btn-secondary btn-sm"><i class="fas fa-eye"></i></button>
                                         </td>
                                     </tr>
@@ -1233,64 +1992,340 @@
                     </div>
                 </div>
 
-                <!-- Add Customer Form (Hidden by default) -->
-                <div class="page-view hidden" id="addCustomerPage">
+                <!-- Reports Page -->
+                <div class="page-view" id="reportsPage">
                     <div class="section-header">
-                        <h1 class="section-title">Add New Customer</h1>
+                        <h1 class="section-title">Reports & Analytics</h1>
+                        <button class="btn btn-primary">
+                            <i class="fas fa-download"></i> Export Report
+                        </button>
+                    </div>
+
+                    <div class="dashboard-grid">
+                        <div class="metric-card">
+                            <div class="metric-icon">💰</div>
+                            <div class="metric-value">R 127,450</div>
+                            <div class="metric-label">Monthly Revenue</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-icon">📈</div>
+                            <div class="metric-value">+23%</div>
+                            <div class="metric-label">Growth Rate</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-icon">🎯</div>
+                            <div class="metric-value">94%</div>
+                            <div class="metric-label">Customer Satisfaction</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-icon">⏱️</div>
+                            <div class="metric-value">4.2 days</div>
+                            <div class="metric-label">Avg. Turnaround</div>
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <div class="table-header">
+                            <h3 class="table-title">Service Performance</h3>
+                        </div>
+                        <div class="table-content">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Service Type</th>
+                                        <th>Orders</th>
+                                        <th>Revenue</th>
+                                        <th>Avg. Value</th>
+                                        <th>Growth</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>DTF Printing</td>
+                                        <td>45</td>
+                                        <td>R 38,250</td>
+                                        <td>R 850</td>
+                                        <td style="color: var(--success);">+18%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Large Format UV</td>
+                                        <td>28</td>
+                                        <td>R 42,500</td>
+                                        <td>R 1,518</td>
+                                        <td style="color: var(--success);">+25%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>UVDTF Stickers</td>
+                                        <td>62</td>
+                                        <td>R 18,600</td>
+                                        <td>R 300</td>
+                                        <td style="color: var(--success);">+12%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Laser Engraving</td>
+                                        <td>34</td>
+                                        <td>R 15,300</td>
+                                        <td>R 450</td>
+                                        <td style="color: var(--success);">+8%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Vinyl Cutting</td>
+                                        <td>38</td>
+                                        <td>R 9,500</td>
+                                        <td>R 250</td>
+                                        <td style="color: var(--danger);">-3%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>3D Printing</td>
+                                        <td>12</td>
+                                        <td>R 3,300</td>
+                                        <td>R 275</td>
+                                        <td style="color: var(--success);">+45%</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Settings Page -->
+                <div class="page-view" id="settingsPage">
+                    <div class="section-header">
+                        <h1 class="section-title">Settings</h1>
                     </div>
 
                     <div class="form-container">
                         <div class="form-header">
-                            <h2 class="form-title">Customer Information</h2>
-                            <p class="form-description">Enter the details of the new customer below</p>
+                            <h2 class="form-title">Company Information</h2>
+                            <p class="form-description">Update your business details</p>
                         </div>
 
                         <div class="form-grid">
                             <div class="form-group">
                                 <label class="form-label">Company Name</label>
-                                <input type="text" class="form-input" placeholder="Enter company name">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Account Number</label>
-                                <input type="text" class="form-input" placeholder="Enter account number">
-                            </div>
-                        </div>
-
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label class="form-label">Primary Contact</label>
-                                <input type="text" class="form-input" placeholder="Enter contact name">
+                                <input type="text" class="form-input" value="Drop Of Colour">
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Email</label>
-                                <input type="email" class="form-input" placeholder="Enter email address">
+                                <input type="email" class="form-input" value="info@dropofcolour.co.za">
                             </div>
                         </div>
 
                         <div class="form-grid">
                             <div class="form-group">
                                 <label class="form-label">Phone</label>
-                                <input type="tel" class="form-input" placeholder="Enter phone number">
+                                <input type="tel" class="form-input" value="+27 XX XXX XXXX">
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Website</label>
-                                <input type="url" class="form-input" placeholder="Enter website URL">
+                                <input type="url" class="form-input" value="https://dropofcolour.co.za">
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label class="form-label">Address</label>
-                            <textarea class="form-textarea" placeholder="Enter full address"></textarea>
+                            <label class="form-label">Business Address</label>
+                            <textarea class="form-textarea">123 Print Street, Johannesburg, Gauteng, 2000, South Africa</textarea>
                         </div>
 
                         <div class="form-group">
-                            <label class="form-label">Notes</label>
-                            <textarea class="form-textarea" placeholder="Additional notes about this customer"></textarea>
+                            <label class="form-label">VAT Registration</label>
+                            <div style="display: flex; align-items: center; gap: 15px; margin-top: 10px;">
+                                <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                                    <input type="checkbox" id="vatRegistered" checked style="width: 18px; height: 18px; cursor: pointer;">
+                                    <span>Are you VAT registered?</span>
+                                </label>
+                            </div>
+                            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 8px;">
+                                <i class="fas fa-info-circle"></i> When enabled, VAT will be added as a line item in invoices, quotes, and other documents
+                            </p>
+                        </div>
+
+                        <div class="form-grid" id="vatNumberSection">
+                            <div class="form-group">
+                                <label class="form-label">VAT Number</label>
+                                <input type="text" class="form-input" value="4123456789" placeholder="Enter VAT number">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">VAT Rate (%)</label>
+                                <input type="number" class="form-input" value="15" placeholder="15" step="0.01">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Company Logo</label>
+                            <div style="display: flex; flex-direction: column; gap: 15px;">
+                                <div style="display: flex; align-items: center; gap: 15px;">
+                                    <div style="width: 120px; height: 120px; border: 2px dashed var(--border-light); border-radius: 8px; display: flex; align-items: center; justify-content: center; background: var(--bg-tertiary);">
+                                        <i class="fas fa-image" style="font-size: 2rem; color: var(--text-muted);"></i>
+                                    </div>
+                                    <div style="flex: 1;">
+                                        <input type="file" id="logoUpload" accept="image/*" style="display: none;">
+                                        <button class="btn btn-secondary" onclick="document.getElementById('logoUpload').click()">
+                                            <i class="fas fa-upload"></i> Upload Logo
+                                        </button>
+                                        <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 8px;">
+                                            Recommended: PNG or SVG, max 2MB, transparent background
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Favicon</label>
+                            <div style="display: flex; flex-direction: column; gap: 15px;">
+                                <div style="display: flex; align-items: center; gap: 15px;">
+                                    <div style="width: 64px; height: 64px; border: 2px dashed var(--border-light); border-radius: 8px; display: flex; align-items: center; justify-content: center; background: var(--bg-tertiary);">
+                                        <i class="fas fa-star" style="font-size: 1.5rem; color: var(--text-muted);"></i>
+                                    </div>
+                                    <div style="flex: 1;">
+                                        <input type="file" id="faviconUpload" accept="image/x-icon,image/png" style="display: none;">
+                                        <button class="btn btn-secondary" onclick="document.getElementById('faviconUpload').click()">
+                                            <i class="fas fa-upload"></i> Upload Favicon
+                                        </button>
+                                        <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 8px;">
+                                            Recommended: ICO or PNG, 32x32px or 64x64px
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="form-footer">
-                            <button class="btn btn-secondary" id="cancelCustomerBtn">Cancel</button>
-                            <button class="btn btn-primary">Save Customer</button>
+                            <button class="btn btn-primary">Save Changes</button>
+                        </div>
+                    </div>
+
+                    <div class="form-container">
+                        <div class="form-header">
+                            <h2 class="form-title">Email Settings</h2>
+                            <p class="form-description">Configure your email server settings for sending quotes and invoices</p>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Email Provider</label>
+                            <select class="form-select" id="emailProvider">
+                                <option value="">Select email provider</option>
+                                <option value="office365" selected>Microsoft Office 365</option>
+                                <option value="gmail">Gmail</option>
+                                <option value="smtp">Custom SMTP</option>
+                                <option value="pop3">POP3</option>
+                                <option value="imap">IMAP</option>
+                            </select>
+                        </div>
+
+                        <div id="emailConfigSection">
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label class="form-label">Email Address</label>
+                                    <input type="email" class="form-input" value="info@dropofcolour.co.za" placeholder="your-email@domain.com">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Display Name</label>
+                                    <input type="text" class="form-input" value="Drop Of Colour" placeholder="Your Company Name">
+                                </div>
+                            </div>
+
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label class="form-label">SMTP Server</label>
+                                    <input type="text" class="form-input" value="smtp.office365.com" placeholder="smtp.example.com">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">SMTP Port</label>
+                                    <input type="number" class="form-input" value="587" placeholder="587">
+                                </div>
+                            </div>
+
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label class="form-label">Username</label>
+                                    <input type="text" class="form-input" value="info@dropofcolour.co.za" placeholder="username">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Password</label>
+                                    <input type="password" class="form-input" value="••••••••" placeholder="password">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Encryption</label>
+                                <select class="form-select">
+                                    <option value="tls" selected>TLS</option>
+                                    <option value="ssl">SSL</option>
+                                    <option value="none">None</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                                    <input type="checkbox" checked style="width: 18px; height: 18px; cursor: pointer;">
+                                    <span class="form-label" style="margin: 0;">Use authentication</span>
+                                </label>
+                            </div>
+
+                            <div class="form-group">
+                                <button class="btn btn-secondary">
+                                    <i class="fas fa-paper-plane"></i> Send Test Email
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="form-footer">
+                            <button class="btn btn-primary">Save Email Settings</button>
+                        </div>
+                    </div>
+
+                    <div class="form-container">
+                        <div class="form-header">
+                            <h2 class="form-title">Services Offered</h2>
+                            <p class="form-description">Manage your service offerings</p>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Active Services</label>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 10px;">
+                                <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                                    <input type="checkbox" checked style="width: 18px; height: 18px; cursor: pointer;">
+                                    <span>DTF Printing</span>
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                                    <input type="checkbox" checked style="width: 18px; height: 18px; cursor: pointer;">
+                                    <span>UVDTF Printing</span>
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                                    <input type="checkbox" checked style="width: 18px; height: 18px; cursor: pointer;">
+                                    <span>Large Format Printing</span>
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                                    <input type="checkbox" checked style="width: 18px; height: 18px; cursor: pointer;">
+                                    <span>UV Printing</span>
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                                    <input type="checkbox" checked style="width: 18px; height: 18px; cursor: pointer;">
+                                    <span>3D Printing</span>
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                                    <input type="checkbox" checked style="width: 18px; height: 18px; cursor: pointer;">
+                                    <span>Laser Cutting</span>
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                                    <input type="checkbox" checked style="width: 18px; height: 18px; cursor: pointer;">
+                                    <span>Laser Engraving</span>
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                                    <input type="checkbox" checked style="width: 18px; height: 18px; cursor: pointer;">
+                                    <span>Vinyl Cutting</span>
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                                    <input type="checkbox" checked style="width: 18px; height: 18px; cursor: pointer;">
+                                    <span>Sticker Making</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-footer">
+                            <button class="btn btn-primary">Update Services</button>
                         </div>
                     </div>
                 </div>
@@ -1299,26 +2334,22 @@
     </div>
 
     <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div>DROP OF COLOUR CRM &copy; 2023</div>
-                <div>Professional Print Shop Management System</div>
-            </div>
+        <div class="footer-content">
+            <div>DROP OF COLOUR CRM © 2024</div>
+            <div>Professional Print Shop Management System</div>
+            <div>All Systems Operational</div>
         </div>
     </footer>
 
     <script>
-        // Theme toggle functionality
+        // Theme toggle
         const themeToggle = document.getElementById('themeToggle');
         const body = document.body;
         const themeIcon = themeToggle.querySelector('i');
         const themeText = themeToggle.querySelector('span');
 
-        // Check for saved theme preference or respect system preference
-        const savedTheme = localStorage.getItem('theme');
-        const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        
-        if (savedTheme === 'light' || (!savedTheme && !systemPrefersDark)) {
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        if (savedTheme === 'light') {
             body.classList.replace('theme-dark', 'theme-light');
             themeIcon.className = 'fas fa-moon';
             themeText.textContent = 'Dark Mode';
@@ -1341,7 +2372,7 @@
         // Mobile menu toggle
         const menuToggle = document.getElementById('menuToggle');
         const sidebar = document.querySelector('.sidebar');
-        
+
         menuToggle.addEventListener('click', () => {
             sidebar.classList.toggle('mobile-open');
         });
@@ -1350,54 +2381,332 @@
         const navItems = document.querySelectorAll('.nav-item');
         const pageViews = document.querySelectorAll('.page-view');
         const pageTitle = document.getElementById('pageTitle');
-        
+
         navItems.forEach(item => {
-            item.addEventListener('click', (e) => {
-                e.preventDefault();
-                
-                // Update active nav item
+            item.addEventListener('click', () => {
+                const page = item.getAttribute('data-page');
+
                 navItems.forEach(nav => nav.classList.remove('active'));
                 item.classList.add('active');
-                
-                // Show selected page
-                const pageId = item.getAttribute('data-page') + 'Page';
-                pageViews.forEach(page => {
-                    page.classList.add('hidden');
-                    if (page.id === pageId || page.id === 'addCustomerPage') {
-                        page.classList.remove('hidden');
-                    }
-                });
-                
-                // Update page title
+
+                pageViews.forEach(view => view.classList.remove('active'));
+                document.getElementById(page + 'Page').classList.add('active');
+
                 pageTitle.textContent = item.querySelector('span').textContent;
-                
-                // Close mobile menu if open
                 sidebar.classList.remove('mobile-open');
             });
         });
 
-        // Add customer button
-        const addCustomerBtn = document.getElementById('addCustomerBtn');
-        const cancelCustomerBtn = document.getElementById('cancelCustomerBtn');
-        
-        addCustomerBtn.addEventListener('click', () => {
-            navItems.forEach(nav => nav.classList.remove('active'));
-            pageViews.forEach(page => page.classList.add('hidden'));
-            document.getElementById('addCustomerPage').classList.remove('hidden');
-            pageTitle.textContent = 'Add Customer';
-        });
-        
-        cancelCustomerBtn.addEventListener('click', () => {
-            // Reset to customers page
-            document.querySelectorAll('[data-page="customers"]')[0].click();
+        // Quick action cards
+        document.querySelectorAll('.action-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const action = card.getAttribute('data-action');
+                if (action === 'add-customer') {
+                    document.querySelector('[data-page="customers"]').click();
+                    setTimeout(() => {
+                        document.getElementById('addCustomerBtn').click();
+                    }, 100);
+                } else if (action === 'new-quote') {
+                    document.querySelector('[data-page="quotes"]').click();
+                    setTimeout(() => {
+                        document.getElementById('newQuoteBtn').click();
+                    }, 100);
+                } else if (action === 'new-order') {
+                    document.querySelector('[data-page="orders"]').click();
+                } else if (action === 'machine-maintenance') {
+                    document.querySelector('[data-page="machines"]').click();
+                }
+            });
         });
 
-        // Simulate loading indicators
-        setTimeout(() => {
-            const statusIndicator = document.getElementById('statusIndicator');
-            statusIndicator.innerHTML = '<i class="fas fa-check-circle"></i> <span>System is running normally</span>';
-            statusIndicator.className = 'status-indicator status-running';
-        }, 2000);
+        // Customer form toggle
+        const addCustomerBtn = document.getElementById('addCustomerBtn');
+        const cancelCustomerBtn = document.getElementById('cancelCustomerBtn');
+        const customerForm = document.getElementById('customerForm');
+        const saveCustomerBtn = document.getElementById('saveCustomerBtn');
+
+        addCustomerBtn.addEventListener('click', () => {
+            customerForm.classList.remove('hidden');
+            customerForm.scrollIntoView({ behavior: 'smooth' });
+        });
+
+        cancelCustomerBtn.addEventListener('click', () => {
+            customerForm.classList.add('hidden');
+        });
+
+        saveCustomerBtn.addEventListener('click', () => {
+            showNotification('Customer saved successfully!', 'success');
+            customerForm.classList.add('hidden');
+        });
+
+        // Quote form toggle
+        const newQuoteBtn = document.getElementById('newQuoteBtn');
+        const cancelQuoteBtn = document.getElementById('cancelQuoteBtn');
+        const quoteForm = document.getElementById('quoteForm');
+        const saveQuoteBtn = document.getElementById('saveQuoteBtn');
+
+        newQuoteBtn.addEventListener('click', () => {
+            quoteForm.classList.remove('hidden');
+            quoteForm.scrollIntoView({ behavior: 'smooth' });
+        });
+
+        cancelQuoteBtn.addEventListener('click', () => {
+            quoteForm.classList.add('hidden');
+        });
+
+        saveQuoteBtn.addEventListener('click', () => {
+            showNotification('Quote saved and sent successfully!', 'success');
+            quoteForm.classList.add('hidden');
+        });
+
+        // Tab functionality
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                const parent = tab.parentElement;
+                parent.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+            });
+        });
+
+        // Drag and drop for tables
+        let draggedRow = null;
+
+        function setupTableDragDrop(tableBodyId) {
+            const tbody = document.getElementById(tableBodyId);
+            if (!tbody) return;
+
+            const rows = tbody.querySelectorAll('tr[draggable="true"]');
+
+            rows.forEach(row => {
+                row.addEventListener('dragstart', (e) => {
+                    draggedRow = row;
+                    row.classList.add('dragging');
+                    e.dataTransfer.effectAllowed = 'move';
+                });
+
+                row.addEventListener('dragend', () => {
+                    row.classList.remove('dragging');
+                    draggedRow = null;
+                });
+
+                row.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    e.dataTransfer.dropEffect = 'move';
+
+                    if (draggedRow && draggedRow !== row) {
+                        row.classList.add('drag-over');
+                    }
+                });
+
+                row.addEventListener('dragleave', () => {
+                    row.classList.remove('drag-over');
+                });
+
+                row.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    row.classList.remove('drag-over');
+
+                    if (draggedRow && draggedRow !== row) {
+                        const allRows = [...tbody.querySelectorAll('tr')];
+                        const draggedIndex = allRows.indexOf(draggedRow);
+                        const targetIndex = allRows.indexOf(row);
+
+                        if (draggedIndex < targetIndex) {
+                            row.parentNode.insertBefore(draggedRow, row.nextSibling);
+                        } else {
+                            row.parentNode.insertBefore(draggedRow, row);
+                        }
+
+                        showNotification('Order updated successfully!', 'success');
+                    }
+                });
+            });
+        }
+
+        setupTableDragDrop('customersTableBody');
+        setupTableDragDrop('quotesTableBody');
+
+        // Kanban drag and drop
+        let draggedItem = null;
+
+        function setupKanbanDragDrop() {
+            const items = document.querySelectorAll('.kanban-item[draggable="true"]');
+            const columns = document.querySelectorAll('.kanban-items');
+
+            items.forEach(item => {
+                item.addEventListener('dragstart', (e) => {
+                    draggedItem = item;
+                    item.classList.add('dragging');
+                    e.dataTransfer.effectAllowed = 'move';
+                });
+
+                item.addEventListener('dragend', () => {
+                    item.classList.remove('dragging');
+                    draggedItem = null;
+                });
+            });
+
+            columns.forEach(column => {
+                column.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    e.dataTransfer.dropEffect = 'move';
+
+                    const afterElement = getDragAfterElement(column, e.clientY);
+                    if (draggedItem) {
+                        if (afterElement == null) {
+                            column.appendChild(draggedItem);
+                        } else {
+                            column.insertBefore(draggedItem, afterElement);
+                        }
+                    }
+                });
+
+                column.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    updateKanbanCounts();
+                    showNotification('Order status updated!', 'success');
+                });
+            });
+        }
+
+        function getDragAfterElement(container, y) {
+            const draggableElements = [...container.querySelectorAll('.kanban-item:not(.dragging)')];
+
+            return draggableElements.reduce((closest, child) => {
+                const box = child.getBoundingClientRect();
+                const offset = y - box.top - box.height / 2;
+
+                if (offset < 0 && offset > closest.offset) {
+                    return { offset: offset, element: child };
+                } else {
+                    return closest;
+                }
+            }, { offset: Number.NEGATIVE_INFINITY }).element;
+        }
+
+        function updateKanbanCounts() {
+            document.querySelectorAll('.kanban-column').forEach(column => {
+                const count = column.querySelectorAll('.kanban-item').length;
+                column.querySelector('.kanban-count').textContent = count;
+            });
+        }
+
+        setupKanbanDragDrop();
+
+        // Notification system
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+
+            const icon = type === 'success' ? 'fa-check-circle' : 
+                        type === 'error' ? 'fa-exclamation-circle' : 
+                        'fa-info-circle';
+
+            notification.innerHTML = `
+                <i class="fas ${icon}"></i>
+                <span>${message}</span>
+            `;
+
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.style.animation = 'slideInRight 0.3s ease-out reverse';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        // Search functionality
+        const customerSearch = document.getElementById('customerSearch');
+        if (customerSearch) {
+            customerSearch.addEventListener('input', (e) => {
+                const searchTerm = e.target.value.toLowerCase();
+                const rows = document.querySelectorAll('#customersTableBody tr');
+
+                rows.forEach(row => {
+                    const text = row.textContent.toLowerCase();
+                    row.style.display = text.includes(searchTerm) ? '' : 'none';
+                });
+            });
+        }
+
+        // VAT Registration toggle
+        const vatRegistered = document.getElementById('vatRegistered');
+        const vatNumberSection = document.getElementById('vatNumberSection');
+        
+        if (vatRegistered) {
+            vatRegistered.addEventListener('change', (e) => {
+                if (e.target.checked) {
+                    vatNumberSection.style.display = 'grid';
+                    showNotification('VAT will be included in invoices and quotes', 'success');
+                } else {
+                    vatNumberSection.style.display = 'none';
+                    showNotification('VAT has been disabled', 'warning');
+                }
+            });
+        }
+
+        // Email provider configuration
+        const emailProvider = document.getElementById('emailProvider');
+        
+        if (emailProvider) {
+            emailProvider.addEventListener('change', (e) => {
+                const provider = e.target.value;
+                const smtpServer = document.querySelector('input[placeholder="smtp.example.com"]');
+                const smtpPort = document.querySelector('input[placeholder="587"]');
+                
+                if (provider === 'office365') {
+                    smtpServer.value = 'smtp.office365.com';
+                    smtpPort.value = '587';
+                    showNotification('Office 365 settings loaded', 'success');
+                } else if (provider === 'gmail') {
+                    smtpServer.value = 'smtp.gmail.com';
+                    smtpPort.value = '587';
+                    showNotification('Gmail settings loaded', 'success');
+                } else if (provider === 'smtp') {
+                    smtpServer.value = '';
+                    smtpPort.value = '587';
+                    showNotification('Enter custom SMTP settings', 'warning');
+                } else if (provider === 'pop3') {
+                    smtpServer.value = '';
+                    smtpPort.value = '110';
+                    showNotification('Enter POP3 settings', 'warning');
+                } else if (provider === 'imap') {
+                    smtpServer.value = '';
+                    smtpPort.value = '993';
+                    showNotification('Enter IMAP settings', 'warning');
+                }
+            });
+        }
+
+        // Logo upload handler
+        const logoUpload = document.getElementById('logoUpload');
+        if (logoUpload) {
+            logoUpload.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    if (file.size > 2 * 1024 * 1024) {
+                        showNotification('File size must be less than 2MB', 'error');
+                        return;
+                    }
+                    showNotification(`Logo "${file.name}" uploaded successfully!`, 'success');
+                }
+            });
+        }
+
+        // Favicon upload handler
+        const faviconUpload = document.getElementById('faviconUpload');
+        if (faviconUpload) {
+            faviconUpload.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    showNotification(`Favicon "${file.name}" uploaded successfully!`, 'success');
+                }
+            });
+        }
+
+        // Initialize
+        console.log('Drop Of Colour CRM initialized successfully! 🎨');
+        showNotification('Welcome to Drop Of Colour CRM!', 'success');
     </script>
 </body>
 </html>

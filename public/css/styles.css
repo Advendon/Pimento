@@ -1,0 +1,43 @@
+/* CSS Variables and Base Styles */
+:root {
+    --bg-primary: #000000;
+    --bg-secondary: #0a0a0a;
+    --bg-tertiary: #141414;
+    --bg-card: #1a1a1a;
+    --bg-input: #222222;
+    --neon-blue: #00d4ff;
+    --neon-blue-dim: #0099cc;
+    --neon-blue-glow: #00ffff;
+    --text-primary: #ffffff;
+    --text-secondary: #b0b0b0;
+    --text-muted: #666666;
+    --border-color: #1a1a1a;
+    --border-light: #2a2a2a;
+    --success: #00ff88;
+    --warning: #ffaa00;
+    --danger: #ff4444;
+    --shadow-glow: rgba(0, 212, 255, 0.3);
+    --shadow-deep: rgba(0, 0, 0, 0.8);
+    --sidebar-width: 280px;
+    --header-height: 70px;
+}
+
+.theme-light {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8f9fa;
+    --bg-tertiary: #e9ecef;
+    --bg-card: #ffffff;
+    --bg-input: #f8f9fa;
+    --neon-blue: #0066cc;
+    --neon-blue-dim: #0052a3;
+    --neon-blue-glow: #0077e6;
+    --text-primary: #1a1a1a;
+    --text-secondary: #495057;
+    --text-muted: #6c757d;
+    --border-color: #dee2e6;
+    --border-light: #e9ecef;
+    --shadow-glow: rgba(0, 102, 204, 0.2);
+    --shadow-deep: rgba(0, 0, 0, 0.1);
+}
+
+/* Base styles, layout, components, etc. */

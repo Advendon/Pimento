@@ -1,5 +1,4 @@
 "use strict";
-// Core types for the printshop CRM system
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProductCategory = exports.OrderStatus = void 0;
 var OrderStatus;

@@ -28,6 +28,37 @@ export class CustomerService {
     });
   }
 
+  interface CostingOutput {
+  totalCost: number;
+  markupAmount: number;
+  finalPrice: number;
+  breakdown: {
+    materials: number;
+    labor: number;
+    overhead: number;
+    profit: number;
+  };
+  currency: string;
+  auditTrace: CostingInput & { calculatedAt: Date };
+}
+
+// Add currency conversion method
+convertCurrency(amount: number, fromCurrency: string, toCurrency: string): number {
+  const rates = {
+    ZAR: 1,
+    USD: 0.053,
+    EUR: 0.049,
+    GBP: 0.042
+  };
+  
+  if (fromCurrency === toCurrency) return amount;
+  
+  // Convert to ZAR first (base currency)
+  const zarAmount = fromCurrency === 'ZAR' ? amount : amount / rates[fromCurrency];
+  // Then convert to target currency
+  return toCurrency === 'ZAR' ? zarAmount : zarAmount * rates[toCurrency];
+}
+
   async updateCustomer(id: string, data: Partial<Customer>): Promise<Customer> {
     return this.prisma.customer.update({
       where: { id },

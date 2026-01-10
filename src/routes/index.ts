@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { DatabaseService } from '../database/DatabaseService';
+import { authenticateToken } from '../../Middleware/auth';
 
 export function createRoutes(dbService: DatabaseService): Router {
   const router = Router();
@@ -161,6 +162,53 @@ export function createRoutes(dbService: DatabaseService): Router {
       });
     }
   });
+
+  // Get current user
+router.get('/api/users/me', authenticateToken, async (req, res) => {
+  try {
+    const prisma = dbService.getPrisma();
+    const user = await prisma.user.findUnique({
+      where: { id: req.user.userId },
+      select: { 
+        id: true, 
+        email: true, 
+        name: true, 
+        role: true, 
+        settings: true,
+        organizationId: true 
+      }
+    });
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    res.json(user);
+  } catch (error) {
+    console.error('Get current user error:', error);
+    res.status(500).json({ error: 'Failed to get user' });
+  }
+});
+
+ // Update user settings
+router.put('/api/users/settings', authenticateToken, async (req, res) => {
+  try {
+    const { settings } = req.body;
+    const userId = req.user.userId;
+    const prisma = dbService.getPrisma();
+
+    const updatedUser = await prisma.user.update({
+      where: { id: userId },
+      data: { settings },
+      select: { id: true, settings: true }
+    });
+
+    res.json(updatedUser);
+  } catch (error) {
+    console.error('Update settings error:', error);
+    res.status(500).json({ error: 'Failed to update settings' });
+  }
+});
 
   return router;
 }

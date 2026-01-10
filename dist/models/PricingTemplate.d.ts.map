@@ -1,0 +1,1 @@
+{"version":3,"file":"PricingTemplate.d.ts","sourceRoot":"","sources":["../../src/models/PricingTemplate.ts"],"names":[],"mappings":"AAAA,MAAM,WAEK,eAAe;IACxB,EAAE,EAAE,MAAM,CAAC;IACX,cAAc,EAAE,MAAM,CAAC;IACvB,YAAY,EAAE,MAAM,CAAC;IACrB,KAAK,EAAE,MAAM,CAAC,MAAM,EAAE,GAAG,CAAC,CAAC;IAC3B,SAAS,EAAE,IAAI,CAAC;IAChB,SAAS,EAAE,IAAI,CAAC;CACjB"}

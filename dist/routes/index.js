@@ -2,13 +2,12 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createRoutes = createRoutes;
 const express_1 = require("express");
+const auth_1 = require("../../Middleware/auth");
 function createRoutes(dbService) {
     const router = (0, express_1.Router)();
-    // Health check
     router.get('/health', (req, res) => {
         res.json({ status: 'OK', timestamp: new Date().toISOString() });
     });
-    // Get all customers
     router.get('/customers', async (req, res) => {
         try {
             const prisma = dbService.getPrisma();
@@ -30,7 +29,6 @@ function createRoutes(dbService) {
             });
         }
     });
-    // Get all quotes
     router.get('/quotes', async (req, res) => {
         try {
             const prisma = dbService.getPrisma();
@@ -49,7 +47,6 @@ function createRoutes(dbService) {
             });
         }
     });
-    // Get all machines
     router.get('/machines', async (req, res) => {
         try {
             const prisma = dbService.getPrisma();
@@ -66,7 +63,6 @@ function createRoutes(dbService) {
             });
         }
     });
-    // Get all users
     router.get('/users', async (req, res) => {
         try {
             const prisma = dbService.getPrisma();
@@ -89,7 +85,6 @@ function createRoutes(dbService) {
             });
         }
     });
-    // Create a new customer
     router.post('/customers', async (req, res) => {
         try {
             const prisma = dbService.getPrisma();
@@ -116,7 +111,6 @@ function createRoutes(dbService) {
             });
         }
     });
-    // Create a new quote
     router.post('/quotes', async (req, res) => {
         try {
             const prisma = dbService.getPrisma();
@@ -146,6 +140,47 @@ function createRoutes(dbService) {
             res.status(400).json({
                 error: error instanceof Error ? error.message : 'An unknown error occurred'
             });
+        }
+    });
+    router.get('/api/users/me', auth_1.authenticateToken, async (req, res) => {
+        try {
+            const prisma = dbService.getPrisma();
+            const user = await prisma.user.findUnique({
+                where: { id: req.user.userId },
+                select: {
+                    id: true,
+                    email: true,
+                    name: true,
+                    role: true,
+                    settings: true,
+                    organizationId: true
+                }
+            });
+            if (!user) {
+                return res.status(404).json({ error: 'User not found' });
+            }
+            res.json(user);
+        }
+        catch (error) {
+            console.error('Get current user error:', error);
+            res.status(500).json({ error: 'Failed to get user' });
+        }
+    });
+    router.put('/api/users/settings', auth_1.authenticateToken, async (req, res) => {
+        try {
+            const { settings } = req.body;
+            const userId = req.user.userId;
+            const prisma = dbService.getPrisma();
+            const updatedUser = await prisma.user.update({
+                where: { id: userId },
+                data: { settings },
+                select: { id: true, settings: true }
+            });
+            res.json(updatedUser);
+        }
+        catch (error) {
+            console.error('Update settings error:', error);
+            res.status(500).json({ error: 'Failed to update settings' });
         }
     });
     return router;

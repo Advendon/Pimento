@@ -59,7 +59,6 @@ class DatabaseService {
         await this.prisma.$disconnect();
         await this.pool.end();
     }
-    // Helper method to execute raw SQL
     async query(text, params) {
         const start = Date.now();
         try {

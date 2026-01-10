@@ -45,6 +45,24 @@ export function createAuthRoutes(dbService: DatabaseService): Router {
         }
       });
 
+      const user = await prisma.user.create({
+  data: {
+    email,
+    name,
+    passwordHash,
+    organizationId: org.id,
+    role,
+    phone,
+    timezone: timezone || 'Africa/Johannesburg',
+    locale: locale || 'en-ZA',
+    isActive: true,
+    settings: {
+      currency: 'ZAR',
+      theme: 'dark'
+    }
+  }
+});
+
       // Generate JWT
       const token = jwt.sign(
         {
