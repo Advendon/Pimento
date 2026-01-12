@@ -243,7 +243,7 @@
 
         .content-area {
             padding: 30px;
-        }
+        
 
                     padding: 30px;
             height: calc(100vh - var(--header-height));
@@ -422,9 +422,7 @@
         .action-description {
             color: var(--text-secondary);
             line-height: 1.5;
-        }
-
-                    background: var(--bg-card);
+            background: var(--bg-card);
             border-radius: 12px;
             border: 1px solid var(--border-light);
             overflow: hidden;
@@ -2276,7 +2274,7 @@
                         </div>
 
                         <div class="form-footer">
-                            <button class="btn btn-primary" onclick="saveCompanyInfo()">Save Changes</button>
+                            <button class="btn btn-primary" id="saveCompanyInfoBtn">Save Changes</button>
                         </div>
                         
                     </div>
@@ -2406,8 +2404,10 @@
                         </div>
 
                         <div class="form-footer">
-                            <button class="btn btn-secondary" onclick="resetBranding()" style="margin-right: auto;">Reset to Default</button>
-                            <button class="btn btn-primary" onclick="showNotification('Files are uploaded automatically when selected', 'info')">Auto-Upload Enabled</button>
+                            <div class="form-footer">
+                                  <button class="btn btn-secondary" id="resetBrandingBtn" style="margin-right: auto;">Reset to Default</button>
+                                 <button class="btn btn-primary" id="autoUploadInfoBtn">Auto-Upload Enabled</button>
+                            </div>
                         </div>
                     </div>
 
@@ -2438,7 +2438,36 @@
         </div>
     </footer>
 
-    <script>
+        <script>
+    // Global functions for inline onclick handlers
+    function showNotification(message, type = 'success') {
+        const notification = document.createElement('div');
+        notification.className = `notification ${type}`;
+        notification.textContent = message;
+        document.body.appendChild(notification);
+        
+        setTimeout(() => notification.classList.add('show'), 10);
+        setTimeout(() => {
+            notification.classList.remove('show');
+            setTimeout(() => notification.remove(), 300);
+        }, 3000);
+    }
+
+    function resetBranding() {
+        // ... function code
+    }
+
+    function saveCompanyInfo() {
+        // ... function code
+    }
+
+    // DOM-dependent code
+    document.addEventListener('DOMContentLoaded', () => {
+        // Theme toggle and other code that needs DOM elements
+    });
+
+
+        document.addEventListener('DOMContentLoaded', () => {
         // Theme toggle
         const themeToggle = document.getElementById('themeToggle');
         const body = document.body;
@@ -2947,15 +2976,16 @@
             }
             
             const reader = new FileReader();
-                            const logoDataUrl = event.target.result;
-                localStorage.setItem('companyLogo', logoDataUrl);
-                updateLogo(logoDataUrl);
+            reader.onload = (event) => {
+                  const logoDataUrl = event.target.result;
+                  localStorage.setItem('companyLogo', logoDataUrl);
+                 updateLogo(logoDataUrl);
                 showNotification(`Logo "${file.name}" uploaded successfully!`, 'success');
             };
-            reader.readAsDataURL(file);
+             reader.readAsDataURL(file);
         }
     });
-}
+
 
 // Favicon Upload Handler
 if (faviconUpload) {
@@ -2976,8 +3006,8 @@ if (faviconUpload) {
             };
             reader.readAsDataURL(file);
         }
-    });
-}
+     });  
+} 
 
 // Load saved logo and favicon on page load
 (function loadBranding() {
@@ -2993,11 +3023,20 @@ if (faviconUpload) {
     }
 })();
 
-        // Initialize
+            // Button event listeners
+        document.getElementById('resetBrandingBtn')?.addEventListener('click', resetBranding);
+        document.getElementById('autoUploadInfoBtn')?.addEventListener('click', () => {
+                showNotification('Files are uploaded automatically when selected', 'info');
+        });
+        
+        document.getElementById('saveCompanyInfoBtn')?.addEventListener('click', saveCompanyInfo);
+
+            // Initialize
         console.log('Drop Of Colour CRM initialized successfully! 🎨');
-        showNotification('Welcome to Drop Of Colour CRM!', 'success');
-        console.log('Drop Of Colour CRM initialized successfully! 🎨');
-        showNotification('Welcome to Drop Of Colour CRM!', 'success');
+                showNotification('Welcome to Drop Of Colour CRM!', 'success');
+
+});
+
     </script>
 </body>
 </html>

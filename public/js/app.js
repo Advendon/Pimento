@@ -66,5 +66,6 @@ class CRMApp {
 
 // Initialize app when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    new CRMApp();
+    const navigationManager = new NavigationManager();
+    navigationManager.init();
 });
