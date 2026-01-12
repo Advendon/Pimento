@@ -245,6 +245,21 @@
             padding: 30px;
         }
 
+                    padding: 30px;
+            height: calc(100vh - var(--header-height));
+            overflow-y: auto;
+        }
+
+        .page-view {
+            display: none;
+            height: 100%;
+        }
+
+        .page-view.active {
+            display: flex;
+            flex-direction: column;
+        }
+
         .page-view {
             display: none;
         }
@@ -409,13 +424,15 @@
             line-height: 1.5;
         }
 
-        .table-container {
-            background: var(--bg-card);
+                    background: var(--bg-card);
             border-radius: 12px;
             border: 1px solid var(--border-light);
             overflow: hidden;
             box-shadow: 0 4px 20px var(--shadow-deep);
             margin-bottom: 30px;
+            max-height: calc(100vh - 200px);
+            display: flex;
+            flex-direction: column;
         }
 
         .table-header {
@@ -427,6 +444,7 @@
             align-items: center;
             flex-wrap: wrap;
             gap: 15px;
+            flex-shrink: 0;
         }
 
         .table-title {
@@ -482,12 +500,15 @@
         }
 
         .table-content {
-            overflow-x: auto;
+            overflow: auto;
+            flex: 1;
+            min-height: 0;
         }
 
         .data-table {
             width: 100%;
             border-collapse: collapse;
+            min-width: 800px;
         }
 
         .data-table th {
@@ -498,12 +519,16 @@
             color: var(--text-secondary);
             border-bottom: 1px solid var(--border-light);
             white-space: nowrap;
+            position: sticky;
+            top: 0;
+            z-index: 10;
         }
 
         .data-table td {
             padding: 15px 20px;
             border-bottom: 1px solid var(--border-light);
             color: var(--text-primary);
+            white-space: nowrap;
         }
 
         .data-table tr:last-child td {
@@ -514,8 +539,13 @@
             background: var(--bg-tertiary);
         }
 
+        .data-table tr[draggable="true"] {
+            cursor: move;
+        }
+
         .data-table tr.dragging {
             opacity: 0.5;
+            background: var(--bg-tertiary);
         }
 
         .data-table tr.drag-over {
@@ -677,15 +707,19 @@
         .status-indicator {
             display: inline-flex;
             align-items: center;
-            gap: 12px;
-            padding: 15px 30px;
-            border-radius: 50px;
-            font-weight: 600;
-            font-size: 1.1rem;
-            background: var(--bg-tertiary);
-            border: 1px solid var(--border-color);
+                        cursor: grab;
+            color: var(--text-muted);
+            transition: color 0.3s ease;
         }
 
+        .drag-handle:hover {
+            color: var(--neon-blue);
+        }
+
+        .drag-handle:active {
+            cursor: grabbing;
+        }
+        
         .status-running {
             color: var(--success);
             border-color: var(--success);
@@ -863,6 +897,26 @@
             }
         }
 
+                @media (max-width: 768px) {
+            .table-actions {
+                width: 100%;
+            }
+
+            .table-actions input {
+                width: 100% !important;
+            }
+
+            .data-table {
+                min-width: 600px;
+            }
+
+            .data-table td,
+            .data-table th {
+                padding: 10px 12px;
+                font-size: 0.9rem;
+            }
+        }
+
         @media (max-width: 768px) {
             .header {
                 padding: 0 15px;
@@ -896,6 +950,61 @@
             .form-footer .btn {
                 width: 100%;
                 justify-content: center;
+            }
+        }
+                /* Notification Toast */
+        .notification {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 15px 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            z-index: 10000;
+            min-width: 300px;
+            animation: slideIn 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .notification.success {
+            border-left: 4px solid var(--success-color);
+        }
+
+        .notification.error {
+            border-left: 4px solid var(--danger-color);
+        }
+
+        .notification.warning {
+            border-left: 4px solid var(--warning-color);
+        }
+
+        .notification.info {
+            border-left: 4px solid var(--neon-blue);
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(400px);
+                opacity: 0;
             }
         }
 
@@ -946,12 +1055,11 @@
 </head>
 <body class="theme-dark">
     <div class="app-container">
-        <!-- Sidebar -->
+                <!-- Sidebar -->
         <aside class="sidebar">
             <div class="sidebar-header">
-                <div class="logo">
+                <div class="logo" id="companyLogo">
                     <i class="fas fa-palette"></i>
-                    <span>DROP OF COLOUR</span>
                 </div>
             </div>
             <nav class="nav-menu">
@@ -2100,38 +2208,80 @@
                             <p class="form-description">Update your business details</p>
                         </div>
 
-                        <div class="form-grid">
+                    <div class="form-grid">
                             <div class="form-group">
                                 <label class="form-label">Company Name</label>
-                                <input type="text" class="form-input" value="Drop Of Colour">
+                                <input type="text" id="companyName" class="form-input" value="Drop Of Colour">
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Email</label>
-                                <input type="email" class="form-input" value="info@dropofcolour.co.za">
+                                <input type="email" id="companyEmail" class="form-input" value="info@dropofcolour.co.za">
                             </div>
                         </div>
 
                         <div class="form-grid">
                             <div class="form-group">
                                 <label class="form-label">Phone</label>
-                                <input type="tel" class="form-input" value="+27 XX XXX XXXX">
+                                <input type="tel" id="companyPhone" class="form-input" value="+27 XX XXX XXXX">
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Website</label>
-                                <input type="url" class="form-input" value="https://dropofcolour.co.za">
+                                <input type="url" id="companyWebsite" class="form-input" value="https://dropofcolour.co.za">
+                            </div>
+                        </div>
+
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label">Street Address</label>
+                                <input type="text" id="companyStreet" class="form-input" value="123 Print Street">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">City</label>
+                                <input type="text" id="companyCity" class="form-input" value="Johannesburg">
+                            </div>
+                        </div>
+
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label">Province</label>
+                                <select id="companyProvince" class="form-select">
+                                    <option value="">Select Province</option>
+                                    <option value="eastern-cape">Eastern Cape</option>
+                                    <option value="free-state">Free State</option>
+                                    <option value="gauteng" selected>Gauteng</option>
+                                    <option value="kwazulu-natal">KwaZulu-Natal</option>
+                                    <option value="limpopo">Limpopo</option>
+                                    <option value="mpumalanga">Mpumalanga</option>
+                                    <option value="northern-cape">Northern Cape</option>
+                                    <option value="north-west">North West</option>
+                                    <option value="western-cape">Western Cape</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Postal Code</label>
+                                <input type="text" id="companyPostalCode" class="form-input" value="2000">
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label class="form-label">Business Address</label>
-                            <textarea class="form-textarea">123 Print Street, Johannesburg, Gauteng, 2000, South Africa</textarea>
+                            <label class="form-label">Country</label>
+                            <select id="companyCountry" class="form-select">
+                                <option value="south-africa" selected>South Africa</option>
+                                <option value="botswana">Botswana</option>
+                                <option value="namibia">Namibia</option>
+                                <option value="zimbabwe">Zimbabwe</option>
+                                <option value="mozambique">Mozambique</option>
+                                <option value="other">Other</option>
+                            </select>
                         </div>
 
                         <div class="form-footer">
-                            <button class="btn btn-primary">Save Changes</button>
+                            <button class="btn btn-primary" onclick="saveCompanyInfo()">Save Changes</button>
                         </div>
+                        
                     </div>
 
+                    
                     <div class="form-container">
                         <div class="form-header">
                             <h2 class="form-title">Services Offered</h2>
@@ -2184,32 +2334,13 @@
                             <button class="btn btn-primary">Update Services</button>
                         </div>
                     </div>
-                    <!-- Add this after line 2186 (after the Services Offered section closes) and before line 2187 (closing div) -->
+
 
                     <div class="form-container">
                         <div class="form-header">
                             <h2 class="form-title">Branding</h2>
                             <p class="form-description">Upload your company logo and favicon</p>
-                        </div>
-
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label class="form-label">Company Logo</label>
-                                <input type="file" id="logoUpload" class="form-input" accept="image/*">
-                                <small style="color: var(--text-muted); display: block; margin-top: 5px;">Recommended: PNG or SVG, max 2MB</small>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Favicon</label>
-                                <input type="file" id="faviconUpload" class="form-input" accept="image/x-icon,image/png">
-                                <small style="color: var(--text-muted); display: block; margin-top: 5px;">Recommended: ICO or PNG, 32x32px</small>
-                            </div>
-                        </div>
-
-                        <div class="form-footer">
-                            <button class="btn btn-primary">Upload Files</button>
-                        </div>
-                    </div>
-
+                        
                     <div class="form-container">
                         <div class="form-header">
                             <h2 class="form-title">Email Configuration</h2>
@@ -2257,33 +2388,31 @@
 
                     <div class="form-container">
                         <div class="form-header">
-                            <h2 class="form-title">VAT Settings</h2>
-                            <p class="form-description">Configure VAT/Tax settings for your business</p>
+                            <h2 class="form-title">Branding</h2>
+                            <p class="form-description">Upload your company logo and favicon</p>
                         </div>
 
-                        <div class="form-group">
-                            <label style="display: flex; align-items: center; gap: 15px; cursor: pointer;">
-                                <input type="checkbox" id="vatRegistered" style="width: 20px; height: 20px; cursor: pointer;">
-                                <div>
-                                    <span style="font-weight: 600; color: var(--text-primary); display: block;">VAT Registered Business</span>
-                                    <small style="color: var(--text-muted);">Enable this if your business is registered for VAT</small>
-                                </div>
-                            </label>
-                        </div>
-
-                        <div id="vatNumberSection" style="display: none;">
-                            <div class="form-grid">
-                                <div class="form-group">
-                                    <label class="form-label">VAT Registration Number</label>
-                                    <input type="text" class="form-input" placeholder="4123456789">
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">VAT Rate (%)</label>
-                                    <input type="number" class="form-input" value="15" step="0.01">
-                                </div>
-                            </div>
-
+                        <div class="form-grid">
                             <div class="form-group">
+                                <label class="form-label">Company Logo</label>
+                                <input type="file" id="logoUpload" class="form-input" accept="image/*">
+                                <small style="color: var(--text-muted); display: block; margin-top: 5px;">Recommended: PNG or SVG, max 2MB</small>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Favicon</label>
+                                <input type="file" id="faviconUpload" class="form-input" accept="image/x-icon,image/png">
+                                <small style="color: var(--text-muted); display: block; margin-top: 5px;">Recommended: ICO or PNG, 32x32px</small>
+                            </div>
+                        </div>
+
+                        <div class="form-footer">
+                            <button class="btn btn-secondary" onclick="resetBranding()" style="margin-right: auto;">Reset to Default</button>
+                            <button class="btn btn-primary" onclick="showNotification('Files are uploaded automatically when selected', 'info')">Auto-Upload Enabled</button>
+                        </div>
+                    </div>
+
+                       
+                              <div class="form-group">
                                 <label class="form-label">VAT Display Options</label>
                                 <select class="form-select">
                                     <option value="inclusive">Prices include VAT</option>
@@ -2301,119 +2430,7 @@
         </main>
     </div>
 
-    <!-- Add this after line 2186 (after the Services Offered section closes) and before line 2187 (closing div) -->
-
-                    <div class="form-container">
-                        <div class="form-header">
-                            <h2 class="form-title">Branding</h2>
-                            <p class="form-description">Upload your company logo and favicon</p>
-                        </div>
-
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label class="form-label">Company Logo</label>
-                                <input type="file" id="logoUpload" class="form-input" accept="image/*">
-                                <small style="color: var(--text-muted); display: block; margin-top: 5px;">Recommended: PNG or SVG, max 2MB</small>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Favicon</label>
-                                <input type="file" id="faviconUpload" class="form-input" accept="image/x-icon,image/png">
-                                <small style="color: var(--text-muted); display: block; margin-top: 5px;">Recommended: ICO or PNG, 32x32px</small>
-                            </div>
-                        </div>
-
-                        <div class="form-footer">
-                            <button class="btn btn-primary">Upload Files</button>
-                        </div>
-                    </div>
-
-                    <div class="form-container">
-                        <div class="form-header">
-                            <h2 class="form-title">Email Configuration</h2>
-                            <p class="form-description">Configure your email settings for sending quotes and invoices</p>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Email Provider</label>
-                            <select id="emailProvider" class="form-select">
-                                <option value="office365">Office 365</option>
-                                <option value="gmail">Gmail</option>
-                                <option value="smtp">Custom SMTP</option>
-                                <option value="pop3">POP3</option>
-                                <option value="imap">IMAP</option>
-                            </select>
-                        </div>
-
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label class="form-label">SMTP Server</label>
-                                <input type="text" class="form-input" placeholder="smtp.example.com">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">SMTP Port</label>
-                                <input type="number" class="form-input" placeholder="587">
-                            </div>
-                        </div>
-
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label class="form-label">Email Username</label>
-                                <input type="email" class="form-input" placeholder="your-email@example.com">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Email Password</label>
-                                <input type="password" class="form-input" placeholder="••••••••">
-                            </div>
-                        </div>
-
-                        <div class="form-footer">
-                            <button class="btn btn-secondary">Test Connection</button>
-                            <button class="btn btn-primary">Save Email Settings</button>
-                        </div>
-                    </div>
-
-                    <div class="form-container">
-                        <div class="form-header">
-                            <h2 class="form-title">VAT Settings</h2>
-                            <p class="form-description">Configure VAT/Tax settings for your business</p>
-                        </div>
-
-                        <div class="form-group">
-                            <label style="display: flex; align-items: center; gap: 15px; cursor: pointer;">
-                                <input type="checkbox" id="vatRegistered" style="width: 20px; height: 20px; cursor: pointer;">
-                                <div>
-                                    <span style="font-weight: 600; color: var(--text-primary); display: block;">VAT Registered Business</span>
-                                    <small style="color: var(--text-muted);">Enable this if your business is registered for VAT</small>
-                                </div>
-                            </label>
-                        </div>
-
-                        <div id="vatNumberSection" style="display: none;">
-                            <div class="form-grid">
-                                <div class="form-group">
-                                    <label class="form-label">VAT Registration Number</label>
-                                    <input type="text" class="form-input" placeholder="4123456789">
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">VAT Rate (%)</label>
-                                    <input type="number" class="form-input" value="15" step="0.01">
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label">VAT Display Options</label>
-                                <select class="form-select">
-                                    <option value="inclusive">Prices include VAT</option>
-                                    <option value="exclusive">Prices exclude VAT</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="form-footer">
-                            <button class="btn btn-primary">Save VAT Settings</button>
-                        </div>
-                    </div>
-    <footer class="footer">
+       <footer class="footer">
         <div class="footer-content">
             <div>DROP OF COLOUR CRM © 2024</div>
             <div>Professional Print Shop Management System</div>
@@ -2457,6 +2474,20 @@
             sidebar.classList.toggle('mobile-open');
         });
 
+        // Notification system
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => notification.classList.add('show'), 10);
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
         // Page navigation
         const navItems = document.querySelectorAll('.nav-item');
         const pageViews = document.querySelectorAll('.page-view');
@@ -2491,16 +2522,16 @@
                     setTimeout(() => {
                         document.getElementById('newQuoteBtn').click();
                     }, 100);
+                    
                 } else if (action === 'new-order') {
                     document.querySelector('[data-page="orders"]').click();
                 } else if (action === 'machine-maintenance') {
                     document.querySelector('[data-page="machines"]').click();
                 }
-                
-            });
-            
+                        });
         });
-        
+
+             
         // VAT Registration toggle
         const vatRegistered = document.getElementById('vatRegistered');
         const vatNumberSection = document.getElementById('vatNumberSection');
@@ -2550,31 +2581,178 @@
             });
         }
 
-        // Logo upload handler
+                // Logo and Favicon Upload with Real-time Preview and Persistence
         const logoUpload = document.getElementById('logoUpload');
+        const faviconUpload = document.getElementById('faviconUpload');
+
+        // Logo Upload Handler
         if (logoUpload) {
             logoUpload.addEventListener('change', (e) => {
                 const file = e.target.files[0];
                 if (file) {
                     if (file.size > 2 * 1024 * 1024) {
-                        showNotification('File size must be less than 2MB', 'error');
+                        showNotification('Logo file size must be less than 2MB', 'error');
                         return;
                     }
-                    showNotification(`Logo "${file.name}" uploaded successfully!`, 'success');
+                    
+                    if (!file.type.match('image.*')) {
+                        showNotification('Please upload a valid image file', 'error');
+                        return;
+                    }
+                    
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        const logoDataUrl = event.target.result;
+                        localStorage.setItem('companyLogo', logoDataUrl);
+                        updateLogo(logoDataUrl);
+                        showNotification(`Logo "${file.name}" uploaded successfully!`, 'success');
+                    };
+                    reader.readAsDataURL(file);
                 }
             });
         }
 
-        // Favicon upload handler
-        const faviconUpload = document.getElementById('faviconUpload');
+        // Favicon Upload Handler
         if (faviconUpload) {
             faviconUpload.addEventListener('change', (e) => {
                 const file = e.target.files[0];
                 if (file) {
-                    showNotification(`Favicon "${file.name}" uploaded successfully!`, 'success');
+                    if (!file.type.match('image.*')) {
+                        showNotification('Please upload a valid image file', 'error');
+                        return;
+                    }
+                    
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        const faviconDataUrl = event.target.result;
+                        localStorage.setItem('companyFavicon', faviconDataUrl);
+                        updateFavicon(faviconDataUrl);
+                        showNotification(`Favicon "${file.name}" uploaded successfully!`, 'success');
+                    };
+                    reader.readAsDataURL(file);
                 }
             });
         }
+
+                // Update Logo in Sidebar Header
+        function updateLogo(logoDataUrl) {
+            const logoElement = document.querySelector('#companyLogo');
+            console.log('Updating logo...', logoElement);
+            if (logoElement) {
+                const existingImg = logoElement.querySelector('img');
+                
+                if (existingImg) {
+                    existingImg.src = logoDataUrl;
+                } else {
+                    logoElement.innerHTML = '';
+                    const logoImg = document.createElement('img');
+                    logoImg.src = logoDataUrl;
+                    logoImg.style.width = '100%';
+                    logoImg.style.height = '60px';
+                    logoImg.style.objectFit = 'contain';
+                    logoImg.style.filter = 'drop-shadow(0 0 5px var(--neon-blue))';
+                    logoElement.appendChild(logoImg);
+                }
+                console.log('Logo updated successfully');
+            } else {
+                console.error('Logo element not found');
+            }
+        }
+
+        // Update Favicon in Browser Tab
+        function updateFavicon(faviconDataUrl) {
+            let favicon = document.querySelector('link[rel="icon"]');
+            if (!favicon) {
+                favicon = document.createElement('link');
+                favicon.rel = 'icon';
+                document.head.appendChild(favicon);
+            }
+            favicon.href = faviconDataUrl;
+            
+            let appleTouchIcon = document.querySelector('link[rel="apple-touch-icon"]');
+            if (!appleTouchIcon) {
+                appleTouchIcon = document.createElement('link');
+                appleTouchIcon.rel = 'apple-touch-icon';
+                document.head.appendChild(appleTouchIcon);
+            }
+            appleTouchIcon.href = faviconDataUrl;
+        }
+
+         // Admin-only Reset Function
+        function resetBranding() {
+            const isAdmin = confirm('Admin access required. Reset logo and favicon to defaults?');
+            if (isAdmin) {
+                localStorage.removeItem('companyLogo');
+                localStorage.removeItem('companyFavicon');
+                
+                // Reset logo to default icon
+                const logoElement = document.querySelector('#companyLogo');
+                if (logoElement) {
+                    logoElement.innerHTML = '<i class="fas fa-palette"></i>';
+                }
+                
+                // Reset favicon to default
+                let favicon = document.querySelector('link[rel="icon"]');
+                if (favicon) {
+                    favicon.remove();
+                }
+                
+                showNotification('Branding reset to defaults', 'success');
+            }
+        }
+        
+        // Company Information Save/Load
+        function saveCompanyInfo() {
+            const companyInfo = {
+                name: document.getElementById('companyName').value,
+                email: document.getElementById('companyEmail').value,
+                phone: document.getElementById('companyPhone').value,
+                website: document.getElementById('companyWebsite').value,
+                street: document.getElementById('companyStreet').value,
+                city: document.getElementById('companyCity').value,
+                province: document.getElementById('companyProvince').value,
+                postalCode: document.getElementById('companyPostalCode').value,
+                country: document.getElementById('companyCountry').value
+            };
+            
+            localStorage.setItem('companyInfo', JSON.stringify(companyInfo));
+            showNotification('Company information saved successfully!', 'success');
+        }
+
+        function loadCompanyInfo() {
+            const saved = localStorage.getItem('companyInfo');
+            if (saved) {
+                const companyInfo = JSON.parse(saved);
+                document.getElementById('companyName').value = companyInfo.name || '';
+                document.getElementById('companyEmail').value = companyInfo.email || '';
+                document.getElementById('companyPhone').value = companyInfo.phone || '';
+                document.getElementById('companyWebsite').value = companyInfo.website || '';
+                document.getElementById('companyStreet').value = companyInfo.street || '';
+                document.getElementById('companyCity').value = companyInfo.city || '';
+                document.getElementById('companyProvince').value = companyInfo.province || '';
+                document.getElementById('companyPostalCode').value = companyInfo.postalCode || '';
+                document.getElementById('companyCountry').value = companyInfo.country || '';
+            }
+        }
+
+                
+        // Load company info when page loads
+        setTimeout(() => loadCompanyInfo(), 100);
+                
+
+// Load saved logo and favicon on page load
+(function loadBranding() {
+    const savedLogo = localStorage.getItem('companyLogo');
+    const savedFavicon = localStorage.getItem('companyFavicon');
+    
+    if (savedLogo) {
+        updateLogo(savedLogo);
+    }
+    
+    if (savedFavicon) {
+        updateFavicon(savedFavicon);
+    }
+})();
         
         // Customer form toggle
         const addCustomerBtn = document.getElementById('addCustomerBtn');
@@ -2718,21 +2896,16 @@
                     }
                 });
 
-                column.addEventListener('drop', (e) => {
-                    e.preventDefault();
-                    updateKanbanCounts();
-                    showNotification('Order status updated!', 'success');
                 });
-            });
-        }
+
 
         function getDragAfterElement(container, y) {
             const draggableElements = [...container.querySelectorAll('.kanban-item:not(.dragging)')];
-
+            
             return draggableElements.reduce((closest, child) => {
                 const box = child.getBoundingClientRect();
                 const offset = y - box.top - box.height / 2;
-
+                
                 if (offset < 0 && offset > closest.offset) {
                     return { offset: offset, element: child };
                 } else {
@@ -2741,44 +2914,15 @@
             }, { offset: Number.NEGATIVE_INFINITY }).element;
         }
 
-        function updateKanbanCounts() {
-            document.querySelectorAll('.kanban-column').forEach(column => {
-                const count = column.querySelectorAll('.kanban-item').length;
-                column.querySelector('.kanban-count').textContent = count;
-            });
-        }
-
         setupKanbanDragDrop();
 
-        // Notification system
-        function showNotification(message, type = 'success') {
-            const notification = document.createElement('div');
-            notification.className = `notification ${type}`;
-
-            const icon = type === 'success' ? 'fa-check-circle' : 
-                        type === 'error' ? 'fa-exclamation-circle' : 
-                        'fa-info-circle';
-
-            notification.innerHTML = `
-                <i class="fas ${icon}"></i>
-                <span>${message}</span>
-            `;
-
-            document.body.appendChild(notification);
-
-            setTimeout(() => {
-                notification.style.animation = 'slideInRight 0.3s ease-out reverse';
-                setTimeout(() => notification.remove(), 300);
-            }, 3000);
-        }
-
-        // Search functionality
+        // Customer search functionality
         const customerSearch = document.getElementById('customerSearch');
         if (customerSearch) {
             customerSearch.addEventListener('input', (e) => {
                 const searchTerm = e.target.value.toLowerCase();
                 const rows = document.querySelectorAll('#customersTableBody tr');
-
+                
                 rows.forEach(row => {
                     const text = row.textContent.toLowerCase();
                     row.style.display = text.includes(searchTerm) ? '' : 'none';
@@ -2786,7 +2930,72 @@
             });
         }
 
+        // Logo and Favicon Upload
+        const logoUpload = document.getElementById('logoUpload');
+        const faviconUpload = document.getElementById('faviconUpload');
+    logoUpload.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            if (file.size > 2 * 1024 * 1024) {
+                showNotification('Logo file size must be less than 2MB', 'error');
+                return;
+            }
+            
+            if (!file.type.match('image.*')) {
+                showNotification('Please upload a valid image file', 'error');
+                return;
+            }
+            
+            const reader = new FileReader();
+                            const logoDataUrl = event.target.result;
+                localStorage.setItem('companyLogo', logoDataUrl);
+                updateLogo(logoDataUrl);
+                showNotification(`Logo "${file.name}" uploaded successfully!`, 'success');
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+}
+
+// Favicon Upload Handler
+if (faviconUpload) {
+    faviconUpload.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            if (!file.type.match('image.*')) {
+                showNotification('Please upload a valid image file', 'error');
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const faviconDataUrl = event.target.result;
+                localStorage.setItem('companyFavicon', faviconDataUrl);
+                updateFavicon(faviconDataUrl);
+                showNotification(`Favicon "${file.name}" uploaded successfully!`, 'success');
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+}
+
+// Load saved logo and favicon on page load
+(function loadBranding() {
+    const savedLogo = localStorage.getItem('companyLogo');
+    const savedFavicon = localStorage.getItem('companyFavicon');
+    
+    if (savedLogo) {
+        updateLogo(savedLogo);
+    }
+    
+    if (savedFavicon) {
+        updateFavicon(savedFavicon);
+    }
+})();
+
         // Initialize
+        console.log('Drop Of Colour CRM initialized successfully! 🎨');
+        showNotification('Welcome to Drop Of Colour CRM!', 'success');
         console.log('Drop Of Colour CRM initialized successfully! 🎨');
         showNotification('Welcome to Drop Of Colour CRM!', 'success');
     </script>
