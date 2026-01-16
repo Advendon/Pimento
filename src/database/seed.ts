@@ -6,7 +6,6 @@ const prisma = new PrismaClient();
 async function main() {
   console.log('🌱 Seeding database with sample data...');
   
-  // Create sample organization
   const organization = await prisma.organization.create({
     data: {
       name: 'Drop Of Colour',
@@ -14,34 +13,39 @@ async function main() {
     }
   });
 
-  // Create admin user
   const passwordHash = await bcrypt.hash('admin123', 12);
   const adminUser = await prisma.user.create({
     data: {
       email: 'admin@dropofcolour.com',
       name: 'Admin User',
       role: 'admin',
+<<<<<<< Updated upstream
       passwordHash,
       isActive: true,
       timezone: 'UTC',
       locale: 'en'
+=======
+      passwordHash
+>>>>>>> Stashed changes
     }
   });
 
-  // Create sales user
   const salesUser = await prisma.user.create({
     data: {
       email: 'sales@dropofcolour.com',
       name: 'Sales Manager',
       role: 'sales',
+<<<<<<< Updated upstream
       passwordHash: await bcrypt.hash('sales123', 12),
       isActive: true,
       timezone: 'UTC',
       locale: 'en'
+=======
+      passwordHash: await bcrypt.hash('sales123', 12)
+>>>>>>> Stashed changes
     }
   });
 
-  // Create sample customers
   const customer1 = await prisma.customer.create({
     data: {
       organizationId: organization.id,
@@ -69,7 +73,6 @@ async function main() {
     }
   });
 
-  // Create customer contacts
   await prisma.customerContact.createMany({
     data: [
       {
@@ -99,21 +102,29 @@ async function main() {
     ]
   });
 
-  // Create sample quotes
   const quote1 = await prisma.quote.create({
     data: {
       organizationId: organization.id,
       customerId: customer1.id,
-      quoteNumber: 'Q-2024-001',
-      status: QuoteStatus.approved,
-      productionDue: new Date('2024-02-15'),
-      customerDue: new Date('2024-02-20'),
-      totalQuantity: 500,
+      quoteNumber: 'QT-2024-001',
+      status: 'approved',
+      createdBy: adminUser.id,
+      totalQuantity: 100,
       totalAmount: 2500.00,
-      productionNotes: 'Use premium quality materials, double-check color matching',
-      createdBy: salesUser.id,
-      approvedBy: adminUser.id,
-      approvedAt: new Date('2024-01-15')
+      productionDue: new Date('2024-12-31'),
+      customerDue: new Date('2025-01-05'),
+      productionNotes: 'Rush order - priority production',
+      lineItems: {
+        create: [
+          {
+            category: 'DTF Printing',
+            description: 'Custom t-shirt transfers',
+            quantity: 100,
+            unitPrice: 25.00,
+            total: 2500.00
+          }
+        ]
+      }
     }
   });
 
@@ -121,138 +132,44 @@ async function main() {
     data: {
       organizationId: organization.id,
       customerId: customer2.id,
-      quoteNumber: 'Q-2024-002',
-      status: QuoteStatus.draft,
-      productionDue: new Date('2024-03-01'),
-      customerDue: new Date('2024-03-10'),
-      totalQuantity: 1000,
-      totalAmount: 4500.00,
-      productionNotes: 'Rush order - prioritize in production schedule',
-      createdBy: salesUser.id
-    }
-  });
-
-  const quote3 = await prisma.quote.create({
-    data: {
-      organizationId: organization.id,
-      customerId: customer3.id,
-      quoteNumber: 'Q-2024-003',
-      status: QuoteStatus.approval_sent,
-      productionDue: new Date('2024-02-28'),
-      customerDue: new Date('2024-03-05'),
-      totalQuantity: 250,
-      totalAmount: 1875.00,
-      productionNotes: 'Custom design requirements - see attached specifications',
-      createdBy: salesUser.id
-    }
-  });
-
-  // Create quote line items
-  await prisma.quoteLineItem.createMany({
-    data: [
-      // Quote 1 line items
-      {
-        quoteId: quote1.id,
-        category: 'DTF Printing',
-        itemCode: 'DTF-TSHIRT-001',
-        description: 'Custom DTF printed t-shirts - 500 units',
-        color: 'Full Color',
-        quantity: 500,
-        unitPrice: 4.50,
-        markupPct: 11.11,
-        total: 2250.00,
-        productionInstructions: 'Use high-quality transfer film, cure at 320°F for 90 seconds'
-      },
-      {
-        quoteId: quote1.id,
-        category: 'Packaging',
-        itemCode: 'PACK-BOX-001',
-        description: 'Custom packaging boxes',
-        color: 'White',
-        quantity: 50,
-        unitPrice: 5.00,
-        markupPct: 0,
-        total: 250.00,
-        productionInstructions: 'Pack in batches of 10'
-      },
-      // Quote 2 line items
-      {
-        quoteId: quote2.id,
-        category: 'UV Printing',
-        itemCode: 'UV-MUG-001',
-        description: 'UV printed ceramic mugs - 1000 units',
-        color: 'Full Color',
-        quantity: 1000,
-        unitPrice: 3.50,
-        markupPct: 28.57,
-        total: 3500.00,
-        productionInstructions: 'Ensure proper curing time for UV ink'
-      },
-      {
-        quoteId: quote2.id,
-        category: 'Screen Printing',
-        itemCode: 'SCR-BAG-001',
-        description: 'Screen printed tote bags',
-        color: '2 Color',
-        quantity: 500,
-        unitPrice: 2.00,
-        markupPct: 0,
-        total: 1000.00,
-        productionInstructions: 'Use 110 mesh count screen'
-      },
-      // Quote 3 line items
-      {
-        quoteId: quote3.id,
-        category: 'Vinyl Cutting',
-        itemCode: 'VIN-DECAL-001',
-        description: 'Custom vinyl decals - 250 units',
-        color: 'Black',
-        quantity: 250,
-        unitPrice: 6.00,
-        markupPct: 25.00,
-        total: 1500.00,
-        productionInstructions: 'Use premium outdoor vinyl, apply transfer tape'
-      },
-      {
-        quoteId: quote3.id,
-        category: 'Laser Engraving',
-        itemCode: 'LAS-PLAQUE-001',
-        description: 'Laser engraved plaques',
-        color: 'Natural',
-        quantity: 25,
-        unitPrice: 15.00,
-        markupPct: 0,
-        total: 375.00,
-        productionInstructions: 'Use 600 DPI resolution for fine detail'
+      quoteNumber: 'QT-2024-002',
+      status: 'approved',
+      createdBy: salesUser.id,
+      totalQuantity: 50,
+      totalAmount: 3750.00,
+      productionDue: new Date('2024-12-28'),
+      customerDue: new Date('2025-01-02'),
+      productionNotes: 'High quality UV printing required',
+      lineItems: {
+        create: [
+          {
+            category: 'UV Printing',
+            description: 'Corporate signage',
+            quantity: 50,
+            unitPrice: 75.00,
+            total: 3750.00
+          }
+        ]
       }
-    ]
-  });
-
-  // Create orders for approved quotes
-  await prisma.order.create({
-    data: {
-      quoteId: quote1.id,
-      orderNumber: 'ORD-2024-001',
-      status: 'created',
-      productionManagerId: adminUser.id,
-      scheduledProductionAt: new Date('2024-02-10'),
-      scheduledShippingAt: new Date('2024-02-18')
     }
   });
 
-  console.log('✅ Sample data created successfully!');
-  console.log('📧 Admin login: admin@dropofcolour.com');
-  console.log('🔑 Admin password: admin123');
-  console.log('📧 Sales login: sales@dropofcolour.com');
-  console.log('🔑 Sales password: sales123');
-  console.log(`📝 Created 3 quotes with line items`);
-  console.log(`👥 Created 3 customers with contacts`);
-  console.log(`📦 Created 1 order from approved quote`);
+  console.log('✅ Database seeded successfully!');
+  console.log(`📊 Created:`);
+  console.log(`   - 1 Organization: ${organization.name}`);
+  console.log(`   - 2 Users (admin, sales)`);
+  console.log(`   - 3 Customers`);
+  console.log(`   - 3 Customer Contacts`);
+  console.log(`   - 2 Quotes`);
 }
 
 main()
   .catch((e) => {
+<<<<<<< Updated upstream
     console.error('❌ Seeding failed:', e);
+=======
+    console.error('❌ Error seeding database:', e);
+>>>>>>> Stashed changes
     process.exit(1);
   })
   .finally(async () => {
